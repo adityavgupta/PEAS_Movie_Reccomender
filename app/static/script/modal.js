@@ -1,5 +1,6 @@
 $(function() {
     $('#goSignUp').click(function() {
+        alert('your message');
         $.ajax({
             url: '/renderSignUp',
             // data: $('form').serialize(),

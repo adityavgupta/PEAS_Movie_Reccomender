@@ -124,14 +124,11 @@ def verify_user_info(_name:str,_password:str)->int:
 
     Returns: The task ID for the inserted entry
     """
-
-    streaming_platforms='default'
     conn = db.connect()
     ##change:verify user info
     try:
         user_id=conn.execute("SELECT MAX(Users.user_id) FROM Users;").fetchall()[0][0]+1
         print(user_id)
-        
     except:
         print("in except")
         user_id=1

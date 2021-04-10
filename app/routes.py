@@ -93,7 +93,7 @@ def signIn():
         # validate the received values
         if _name and _password:
             data = request.get_json()
-            db_helper.insert_new_user(_name,_dob,_password)
+            db_helper.verify_user_info(_name,_password)
             result = {'success': True, 'response': 'Done'}
             return jsonify(result)
         else:
