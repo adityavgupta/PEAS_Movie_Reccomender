@@ -1,1 +1,1 @@
-# PEAS_Movie_Reccomender
+# PEAS_Movie_Recommender
