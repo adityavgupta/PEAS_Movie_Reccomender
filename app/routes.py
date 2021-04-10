@@ -2,7 +2,7 @@
 from flask import render_template, request, jsonify, Flask
 from app import app
 from app import database as db_helper
-
+from werkzeug import generate_password_hash, check_password_hash
 # @app.route("/delete/<int:task_id>", methods=['POST'])
 # def delete(task_id):
 #     """ recieved post requests for entry delete """
@@ -46,40 +46,44 @@ from app import database as db_helper
 #     return jsonify(result)
 
 
-# @app.route("/")
-# def homepage():
-#     """ returns rendered homepage """
-#     items = db_helper.fetch_todo()
-#     return render_template("index.html", items=items)
+@app.route("/")
+def homepage():
+    """ returns rendered homepage """
+    # items = db_helper.fetch_todo()
+    return render_template("index.html")
 
 @app.route('/signUp',methods=['POST'])
 def signUp():
     try:
         _name = request.form['inputName']
-        _email = request.form['inputEmail']
+        _dob = request.form['inputDOB']
         _password = request.form['inputPassword']
 
         # validate the received values
-        if _name and _email and _password:
+        if _name and _dob and _password:
             
             # All Good, let's call MySQL
-            
-            conn = mysql.connect()
-            cursor = conn.cursor()
-            _hashed_password = generate_password_hash(_password)
-            cursor.callproc('sp_createUser',(_name,_email,_hashed_password))
-            data = cursor.fetchall()
-
-            if len(data) is 0:
-                conn.commit()
-                return json.dumps({'message':'User created successfully !'})
-            else:
-                return json.dumps({'error':str(data[0])})
+            # conn = mysql.connect()
+            # cursor = conn.cursor()
+            # _hashed_password = generate_password_hash(_password)
+            # cursor.callproc('sp_createUser',(_name,_email,_hashed_password))
+            # data = cursor.fetchall()
+            data = request.get_json()
+            db_helper.insert_new_user(_name,_dob,_password)
+            result = {'success': True, 'response': 'Done'}
+            return jsonify(result)
+            # if len(data) is 0:
+            #     conn.commit()
+            #     return json.dumps({'message':'User created successfully !'})
+            # else:
+            #     return json.dumps({'error':str(data[0])})
         else:
-            return json.dumps({'html':'<span>Enter the required fields</span>'})
+            return jsonify({'html':'<span>Enter the required fields</span>'})
 
     except Exception as e:
         return json.dumps({'error':str(e)})
-    finally:
-        cursor.close() 
-        conn.close()
+    # finally:
+    #     cursor.close() 
+    #     conn.close()
+
+    
