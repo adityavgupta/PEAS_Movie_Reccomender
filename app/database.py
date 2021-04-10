@@ -127,18 +127,21 @@ def verify_user_info(_name:str,_password:str)->int:
     conn = db.connect()
     ##change:verify user info
     try:
-        user_id=conn.execute("SELECT MAX(Users.user_id) FROM Users;").fetchall()[0][0]+1
-        print(user_id)
+        #verify if user exist
+        user_id=conn.execute("SELECT Users.user_id FROM Users WHERE Users.name={};").format(_name).fetchall()[0][0]
+        # print(user_id)
+        #verify password
+        pswd = conn.execute("SELECT Users.passwd FROM Users WHERE Users.name={};").format(_name).fetchall()[0][0]
+        if pswd == _password:
+            return 0
+        else:
+            print('Wrong pswd')
+            return 1
     except:
-        print("in except")
-        user_id=1
+        #user doesn't exist
+        print("No such user")
+        return 1
     # query = 'Insert Into tasks (task, status) VALUES ("{}", "{}");'.format(
     #     text, "Todo")
-    try:
-        insertion = 'INSERT INTO Users VALUES({},"{}",CAST("{}" as DATE),"{}","{}");'.format(user_id,_name,_dob,streaming_platforms,_password)
-        conn.execute(insertion)
-        print(insertion, file=sys.stderr)
-    except Exception as e:
-        print(e)
     conn.close()
-    return 0
+    return 1

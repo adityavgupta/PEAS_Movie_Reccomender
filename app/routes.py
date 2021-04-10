@@ -93,8 +93,9 @@ def signIn():
         # validate the received values
         if _name and _password:
             data = request.get_json()
-            db_helper.verify_user_info(_name,_password)
-            result = {'success': True, 'response': 'Done'}
+            if not db_helper.verify_user_info(_name,_password):
+                return render_template("signin.html")
+            result = {'success': False, 'response': 'Done'}
             return jsonify(result)
         else:
             return jsonify({'html':'<span>Enter the required fields</span>'})
