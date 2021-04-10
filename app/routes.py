@@ -2,7 +2,7 @@
 from flask import render_template, request, jsonify, Flask
 from app import app
 from app import database as db_helper
-from werkzeug import generate_password_hash, check_password_hash
+#from werkzeug import generate_password_hash, check_password_hash
 # @app.route("/delete/<int:task_id>", methods=['POST'])
 # def delete(task_id):
 #     """ recieved post requests for entry delete """
