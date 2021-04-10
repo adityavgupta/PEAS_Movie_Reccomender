@@ -113,8 +113,35 @@ def insert_new_user(_name:str,_dob:str,_password:str)->int:
         print(insertion, file=sys.stderr)
     except Exception as e:
         print(e)
-    
-    # query_results = conn.execute("Select LAST_INSERT_ID();")
-    # query_results = [x for x in query_results]
+    conn.close()
+    return 0
+
+def verify_user_info(_name:str,_password:str)->int:
+    """Insert new task to todo table.
+
+    Args:
+        text (str): Task description
+
+    Returns: The task ID for the inserted entry
+    """
+
+    streaming_platforms='default'
+    conn = db.connect()
+    ##change:verify user info
+    try:
+        user_id=conn.execute("SELECT MAX(Users.user_id) FROM Users;").fetchall()[0][0]+1
+        print(user_id)
+        
+    except:
+        print("in except")
+        user_id=1
+    # query = 'Insert Into tasks (task, status) VALUES ("{}", "{}");'.format(
+    #     text, "Todo")
+    try:
+        insertion = 'INSERT INTO Users VALUES({},"{}",CAST("{}" as DATE),"{}","{}");'.format(user_id,_name,_dob,streaming_platforms,_password)
+        conn.execute(insertion)
+        print(insertion, file=sys.stderr)
+    except Exception as e:
+        print(e)
     conn.close()
     return 0

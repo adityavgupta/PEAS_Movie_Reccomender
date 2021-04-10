@@ -50,7 +50,17 @@ from app import database as db_helper
 def homepage():
     """ returns rendered homepage """
     # items = db_helper.fetch_todo()
+    print('lelelel')
     return render_template("index.html")
+
+@app.route('/renderSignUp')
+def renderSignUp():
+    print('lelelele')
+    return render_template("signup.html")
+
+@app.route('/renderSignIn')
+def renderSignIn():
+    return render_template("signin.html")
 
 @app.route('/signUp',methods=['POST'])
 def signUp():
@@ -63,28 +73,33 @@ def signUp():
         # validate the received values
         if _name and _dob and _password:
             
-            # All Good, let's call MySQL
-            # conn = mysql.connect()
-            # cursor = conn.cursor()
-            # _hashed_password = generate_password_hash(_password)
-            # cursor.callproc('sp_createUser',(_name,_email,_hashed_password))
-            # data = cursor.fetchall()
             data = request.get_json()
             db_helper.insert_new_user(_name,_dob,_password)
             result = {'success': True, 'response': 'Done'}
             return jsonify(result)
-            # if len(data) is 0:
-            #     conn.commit()
-            #     return json.dumps({'message':'User created successfully !'})
-            # else:
-            #     return json.dumps({'error':str(data[0])})
         else:
             return jsonify({'html':'<span>Enter the required fields</span>'})
 
     except Exception as e:
         return jsonify({'error':str(e)})
-    # finally:
-    #     cursor.close() 
-    #     conn.close()
+
+@app.route('/signIn',methods=['GET'])
+def signIn():
+    try:
+        _name = request.form['inputName']
+        _password = request.form['inputPassword']
+        print(_name, _password)
+
+        # validate the received values
+        if _name and _password:
+            data = request.get_json()
+            db_helper.insert_new_user(_name,_dob,_password)
+            result = {'success': True, 'response': 'Done'}
+            return jsonify(result)
+        else:
+            return jsonify({'html':'<span>Enter the required fields</span>'})
+
+    except Exception as e:
+        return jsonify({'error':str(e)})
 
     

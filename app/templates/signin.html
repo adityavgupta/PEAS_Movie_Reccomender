@@ -6,11 +6,9 @@
     <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
     <link href="../static/styles/signup.css" rel="stylesheet">
     <script src="../static/script/jquery-1.11.2.js"></script>
-    <script src="../static/script/modal.js"></script>
-
+    <script src="../static/script/modal_signin.js"></script>
   </head>
   <body>
- 
     <div class="container">
       <div class="header">
         <nav>
@@ -23,9 +21,15 @@
       </div>
  
       <div class="jumbotron">
-        <h1>Choose</h1>
-        <button id="goSignUp" class="btn btn-lg btn-primary btn-block" type="button">Sign up</button>
-        <button id="goSignIn" class="btn btn-lg btn-primary btn-block" type="button">Sign in</button>
+        <h1>Movie Recommender</h1>
+        <form class="form-signin">
+        <label for="inputName" class="sr-only">User Name</label>
+        <input type="name" name="inputName" id="inputName" class="form-control" placeholder="Name" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
+         
+        <button id="btnSignUp" class="btn btn-lg btn-primary btn-block" type="button">Sign up</button>
+      </form>
       </div>
       <footer class="footer">
         <p>&copy; Company 2015</p>
