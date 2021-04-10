@@ -81,7 +81,7 @@ def signUp():
             return jsonify({'html':'<span>Enter the required fields</span>'})
 
     except Exception as e:
-        return json.dumps({'error':str(e)})
+        return jsonify({'error':str(e)})
     # finally:
     #     cursor.close() 
     #     conn.close()
