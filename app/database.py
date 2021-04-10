@@ -93,14 +93,16 @@ def insert_new_user(_name:str,_dob:str,_password:str) ->  int:
 
     Returns: The task ID for the inserted entry
     """
-
+    streaming_platforms='default'
     conn = db.connect()
-    query = 'Insert Into tasks (task, status) VALUES ("{}", "{}");'.format(
-        text, "Todo")
-    conn.execute(query)
-    query_results = conn.execute("Select LAST_INSERT_ID();")
-    query_results = [x for x in query_results]
-    task_id = query_results[0][0]
+    try:
+        user_id=conn.execute("SELECT MAX(Users.user_id) FROM Users;")+1
+    except:
+        user_id=1
+    # query = 'Insert Into tasks (task, status) VALUES ("{}", "{}");'.format(
+    #     text, "Todo")
+    insertion = 'INSERT INTO Users VALUES("{}","{}","{}","{}","{}");'.format(user_id,_name,_dob,streaming_platforms,_password)
+    conn.execute(insertion)
+    # query_results = conn.execute("Select LAST_INSERT_ID();")
+    # query_results = [x for x in query_results]
     conn.close()
-
-    return task_id
