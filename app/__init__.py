@@ -1,5 +1,6 @@
 """Setup at app startup"""
 import os
+import sys
 import sqlalchemy
 from flask import Flask
 from yaml import load, Loader
@@ -22,7 +23,7 @@ def init_connection_engine():
             variables = load(open("app.yaml"), Loader=Loader)
         except OSError as e:
             print("Make sure you have the app.yaml file setup")
-            os.exit()
+            sys.exit()
 
         env_variables = variables['env_variables']
         for var in env_variables:
