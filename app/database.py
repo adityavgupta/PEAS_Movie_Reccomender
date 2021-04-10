@@ -1,5 +1,6 @@
 """Defines all the functions related to the database"""
 from app import db
+import sys
 
 # def fetch_todo() -> dict:
 #     """Reads all tasks listed in the todo table
@@ -85,7 +86,7 @@ from app import db
 #     conn.execute(query)
 #     conn.close()
 
-def insert_new_user(_name:str,_dob:str,_password:str) ->  int:
+def insert_new_user(_name:str,_dob:str,_password:str)->int:
     """Insert new task to todo table.
 
     Args:
@@ -93,16 +94,27 @@ def insert_new_user(_name:str,_dob:str,_password:str) ->  int:
 
     Returns: The task ID for the inserted entry
     """
+
     streaming_platforms='default'
     conn = db.connect()
+    
     try:
-        user_id=conn.execute("SELECT MAX(Users.user_id) FROM Users;")+1
+        user_id=conn.execute("SELECT MAX(Users.user_id) FROM Users;").fetchall()[0][0]+1
+        print(user_id)
+        
     except:
+        print("in except")
         user_id=1
     # query = 'Insert Into tasks (task, status) VALUES ("{}", "{}");'.format(
     #     text, "Todo")
-    insertion = 'INSERT INTO Users VALUES("{}","{}","{}","{}","{}");'.format(user_id,_name,_dob,streaming_platforms,_password)
-    conn.execute(insertion)
+    try:
+        insertion = 'INSERT INTO Users VALUES({},"{}",CAST("{}" as DATE),"{}","{}");'.format(user_id,_name,_dob,streaming_platforms,_password)
+        conn.execute(insertion)
+        print(insertion, file=sys.stderr)
+    except Exception as e:
+        print(e)
+    
     # query_results = conn.execute("Select LAST_INSERT_ID();")
     # query_results = [x for x in query_results]
     conn.close()
+    return 0

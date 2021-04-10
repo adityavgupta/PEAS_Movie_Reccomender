@@ -58,6 +58,7 @@ def signUp():
         _name = request.form['inputName']
         _dob = request.form['inputDOB']
         _password = request.form['inputPassword']
+        print(_name, _dob, _password)
 
         # validate the received values
         if _name and _dob and _password:

@@ -45,6 +45,11 @@ def init_connection_engine():
 app = Flask(__name__)
 db = init_connection_engine()
 
+# conn = db.connect()
+# results = conn.execute("select * from Users;").fetchall()
+# print([x for x in results])
+# conn.close()
+
 # To prevent from using a blueprint, we use a cyclic import
 # This also means that we need to place this import here
 # pylint: disable=cyclic-import, wrong-import-position
