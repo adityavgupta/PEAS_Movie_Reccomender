@@ -3,6 +3,7 @@ import os
 import sqlalchemy
 from flask import Flask
 from yaml import load, Loader
+from flaskext.mysql import MySQL
 
 
 
