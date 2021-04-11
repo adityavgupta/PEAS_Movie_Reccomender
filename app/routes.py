@@ -50,12 +50,12 @@ from app import database as db_helper
 def homepage():
     """ returns rendered homepage """
     # items = db_helper.fetch_todo()
-    print('lelelel')
+    ##print('lelelel')
     return render_template("index.html")
 
 @app.route('/renderSignUp')
 def renderSignUp():
-    print('lelelele')
+    ##print('lelelele')
     return render_template("signup.html")
 
 @app.route('/renderSignIn')
