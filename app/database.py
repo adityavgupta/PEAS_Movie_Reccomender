@@ -151,15 +151,14 @@ def verify_user_info(_name:str,_password:str)->int:
 
 def lookup(name:str):
     result = None
-    print('fore')
     conn = db.connect()
-    print('back')
     try:
-        #query = '(SELECT m.name, "Movie" as type FROM movie_rec.movie m where m.name like "%Time%" order by m.popularity limit 5) union (SELECT t.name, "TV_Show" as  type from movie_rec.tv_show t where t.name like "%Time%" order by t.popularity limit 5);'
-        query = 'SELECT m.name FROM movie m WHERE m.name LIKE "%'+name+'%" ORDER BY m.popularity LIMIT 10;'
+        query = '(SELECT m.name, "Movie" as type from movie m where m.name LIKE "%%{}%%" ORDER BY m.popularity LIMIT 10)\
+                 UNION \
+                (SELECT t.name, "TV Show" as type from tv_show t where t.name LIKE "%%{}%%" ORDER BY t.popularity LIMIT 10)'.format(name, name)
         print(query)
         result = conn.execute(query).fetchall()
         print(result)
-    except:
-        print("Nothing found")
+    except Exception as e:
+        print(e)
     return result
