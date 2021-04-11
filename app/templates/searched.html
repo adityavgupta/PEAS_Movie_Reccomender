@@ -15,10 +15,20 @@
       <div class="header">
         <nav>
             <div class="topnav">
-                <p>Welcome, {{name}}</p>
+                <p>Welcome, </p>
+                <p name='home_name' id ='home_name'>{{name}}</p>
                 <p>Look up a movie or TVshow</p>
-                <input type="text" placeholder="Search..">
+                <form class="form-signin">
+                <input type="name" name="inputName" id="inputName" class="form-control" placeholder="Name" required autofocus>
                 <button id="btnSearch" class="btn btn-lg btn-primary btn-block" type="button">Search</button>
+                </form>
+                <div>
+                    {% for table in tables %}
+                        {{titles[loop.index]}}
+                        {{ table|safe }}
+                        <button class="btnReview" type="button">Review</button>
+                    {% endfor %}
+                </div>
               </div>
         </nav>
       </div>

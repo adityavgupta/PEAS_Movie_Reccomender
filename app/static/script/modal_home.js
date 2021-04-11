@@ -1,13 +1,16 @@
 $(function() {
     $('#btnSearch').click(function() {
-        console.log('smthing')
+        // console.log('smthing')
         $.ajax({
             url: '/search',
-            data: $('form').serialize(),
+            data: {"name":$('#home_name').html(), "form":$('form').serialize()},
             type: 'POST',
             dataType: 'text',
             success: function(response) {
                 console.log(response);
+                document.open();
+                document.write(`${response}`);
+                document.close();
                 
             },
             error: function(error) {

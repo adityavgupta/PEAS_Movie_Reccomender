@@ -2,6 +2,8 @@
 from flask import render_template, request, jsonify, Flask
 from app import app
 from app import database as db_helper
+import pandas as pd
+import numpy as np
 #from werkzeug import generate_password_hash, check_password_hash
 # @app.route("/delete/<int:task_id>", methods=['POST'])
 # def delete(task_id):
@@ -111,20 +113,31 @@ def renderHome(name):
 @app.route('/search',methods=['POST'])
 def search():
     try:
-        show_name = request.form['inputName']
-        print(show_name)
-
+        print(request.form)
+        print(request.form.getlist('name'))
+        #name = request.form[0][1]
+        show_name = request.form.getlist('form')[0].split('=')[-1]
+        name = request.form.getlist('name')[0]
         # validate the received values
-        print('smthing')
+        print(show_name, name)
         if show_name:
             #data = request.get_json()
-            if db_helper.lookup(show_name):
-                print(lookup(show_name))
-    
-            result = {'success': False, 'response': 'Done'}
-            return jsonify(result)
+            result = db_helper.lookup(show_name)
+            if result:
+                #print(result)
+                #result = [[x[0],x[1]] for x in result]
+                df = pd.DataFrame(result,columns=['Show/Movie Name','Type'])
+                html = df.to_html()
+                print(html)
+                return renderSearched(df,name)
+            #result = {'success': False, 'response': 'Done'}
+            #return jsonify({'html':html})
         else:
             return jsonify({'html':'<span>Enter the required fields</span>'})
 
     except Exception as e:
         return jsonify({'error':str(e)})
+
+@app.route('/renderSearched')
+def renderSearched(df, name):
+    return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)
