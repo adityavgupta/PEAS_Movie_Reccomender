@@ -119,7 +119,7 @@ def search():
         show_name = request.form.getlist('form')[0].split('=')[-1]
         name = request.form.getlist('name')[0]
         # validate the received values
-        print(show_name, name)
+        #print(show_name, name)
         if show_name:
             #data = request.get_json()
             result = db_helper.lookup(show_name)
@@ -130,7 +130,7 @@ def search():
                 keys=('Name','Type')
                 df = [dict(zip(keys, values)) for values in result]
                 #html = df.to_html()
-                print(df)
+                #print(df)
                 return renderSearched(df,name)
             #result = {'success': False, 'response': 'Done'}
             #return jsonify({'html':html})
@@ -143,4 +143,20 @@ def search():
 @app.route('/renderSearched')
 def renderSearched(df, name):
     return render_template("searched.html", name=name, items=df)
+    #return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)
+
+@app.route('/review',methods=['POST'])
+def review():
+    try:
+        print(request.form)
+        username = request.form.getlist('user_name')[0]
+        showname = request.form.getlist('showname')[0]
+        return renderReview(username, showname)
+
+    except Exception as e:
+        return jsonify({'error':str(e)})
+
+@app.route('/renderReview')
+def renderReview(username, showname):
+    return render_template("review.html", username=username, showname=showname)
     #return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)

@@ -6,7 +6,7 @@
     <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet"> -->
     <link href="../static/styles/signup.css" rel="stylesheet">
     <script src="../static/script/jquery-1.11.2.js"></script>
-    <script src="../static/script/modal_home.js"></script>
+    <script src="../static/script/modal_review.js"></script>
 
   </head>
   <body>
@@ -23,13 +23,6 @@
                 <button id="btnSearch" class="btn btn-lg btn-primary btn-block" type="button">Search</button>
                 </form>
                 <div>
-                    <!-- <table class="table"></table>
-                    {% for table in tables %}
-                        {{titles[loop.index]}}
-                        {{ table|safe }}
-                        <li><button class="btnReview">Review</button></li>
-                        
-                    {% endfor %} -->
                     <table class="table">
                         <thead>
                         <tr>
@@ -44,20 +37,7 @@
                             <tr>
                                 <td>{{item.Name}}</td>
                                 <td>{{item.Type}}</td>
-                                <td><button class="btnReview" username="{{name}}" data-source="{{item.Name}}">Review</button></td>
-                                <!-- {% if item.status == "In Progress" %}
-                                    <td><button type="button" class="btn btn-outline-warning btn-sm state" data-source="{{item.id}}">{{item.status}}</button></td>
-                                {%endif%}
-                                {% if item.status == "Todo" %}
-                                    <td><button type="button" class="btn btn-outline-secondary btn-sm state" data-source="{{item.id}}">{{item.status}}</button></td>
-                                {%endif%}
-                                {% if item.status == "Complete" %}
-                                    <td><button type="button" class="btn btn-outline-success btn-sm state" data-source="{{item.id}}">{{item.status}}</button></td>
-                                {%endif%} -->
-                                
-                                <!-- <td><button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#task-modal" data-source="{{item.id}}" data-content="{{item.task}}"><i class="fa fa-pen fa-1" aria-hidden="true"></i></button></td>
-
-                                <td><button class="btn btn-outline-secondary btn-sm remove" data-source="{{item.id}}" type="button"><i class="fa fa-trash fa-1" aria-hidden="true"></i></button></td> -->
+                                <td><button type="button" class="btnReview" data-source="{{name}}" data-content="{{item.Name}}">Review</button></td>
                             </tr>
                         {% endfor %}
                         
@@ -66,15 +46,6 @@
               </div>
         </nav>
       </div>
- 
-      <!-- <div class="jumbotron">
-        <h1>Choose</h1>
-        <button id="goSignUp" class="button btn btn-lg btn-primary btn-block" a href="./signup.html"  type="button">Sign up</button>
-        <button id="goSignIn" class="button btn btn-lg btn-primary btn-block" a href="./signin.html"  type="button">Sign in</button>
-      </div> -->
-      <!-- <footer class="footer">
-        <p>&copy; This is user home {{name}}</p>
-      </footer> -->
  
     </div>
   </body>
