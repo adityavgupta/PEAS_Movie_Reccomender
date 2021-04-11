@@ -95,7 +95,7 @@ def signIn():
             data = request.get_json()
             if db_helper.verify_user_info(_name,_password) == 0:
                 print("redirecting...")
-                renderHome()
+                return renderHome()
                 print("after user home")
             result = {'success': False, 'response': 'Done'}
             return jsonify(result)
