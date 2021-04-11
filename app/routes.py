@@ -94,8 +94,7 @@ def signIn():
         if _name and _password:
             data = request.get_json()
             if db_helper.verify_user_info(_name,_password) == 0:
-                print("redirecting...")
-                return renderHome()
+                return renderHome(_name)
     
             result = {'success': False, 'response': 'Done'}
             return jsonify(result)
@@ -106,5 +105,5 @@ def signIn():
         return jsonify({'error':str(e)})
 
 @app.route('/renderHome')
-def renderHome():
-    return render_template("home.html")
+def renderHome(name):
+    return render_template("home.html", name=name)
