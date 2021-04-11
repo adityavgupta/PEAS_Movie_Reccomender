@@ -23,12 +23,46 @@
                 <button id="btnSearch" class="btn btn-lg btn-primary btn-block" type="button">Search</button>
                 </form>
                 <div>
+                    <!-- <table class="table"></table>
                     {% for table in tables %}
                         {{titles[loop.index]}}
                         {{ table|safe }}
-                        <button class="btnReview" type="button">Review</button>
-                    {% endfor %}
-                </div>
+                        <li><button class="btnReview">Review</button></li>
+                        
+                    {% endfor %} -->
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th class="Name">Name</th>
+                            <th class="Type">Type</th>
+                            <th class="update"></th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>{{item.Name}}</td>
+                                <td>{{item.Type}}</td>
+                                <td><button class="btnReview" username="{{name}}" data-source="{{item.Name}}">Review</button></td>
+                                <!-- {% if item.status == "In Progress" %}
+                                    <td><button type="button" class="btn btn-outline-warning btn-sm state" data-source="{{item.id}}">{{item.status}}</button></td>
+                                {%endif%}
+                                {% if item.status == "Todo" %}
+                                    <td><button type="button" class="btn btn-outline-secondary btn-sm state" data-source="{{item.id}}">{{item.status}}</button></td>
+                                {%endif%}
+                                {% if item.status == "Complete" %}
+                                    <td><button type="button" class="btn btn-outline-success btn-sm state" data-source="{{item.id}}">{{item.status}}</button></td>
+                                {%endif%} -->
+                                
+                                <!-- <td><button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#task-modal" data-source="{{item.id}}" data-content="{{item.task}}"><i class="fa fa-pen fa-1" aria-hidden="true"></i></button></td>
+
+                                <td><button class="btn btn-outline-secondary btn-sm remove" data-source="{{item.id}}" type="button"><i class="fa fa-trash fa-1" aria-hidden="true"></i></button></td> -->
+                            </tr>
+                        {% endfor %}
+                        
+                        </tbody>
+                    </table>
               </div>
         </nav>
       </div>

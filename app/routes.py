@@ -126,9 +126,11 @@ def search():
             if result:
                 #print(result)
                 #result = [[x[0],x[1]] for x in result]
-                df = pd.DataFrame(result,columns=['Show/Movie Name','Type'])
-                html = df.to_html()
-                print(html)
+                #df = pd.DataFrame(result,columns=['Show/Movie Name','Type'])
+                keys=('Name','Type')
+                df = [dict(zip(keys, values)) for values in result]
+                #html = df.to_html()
+                print(df)
                 return renderSearched(df,name)
             #result = {'success': False, 'response': 'Done'}
             #return jsonify({'html':html})
@@ -140,4 +142,5 @@ def search():
 
 @app.route('/renderSearched')
 def renderSearched(df, name):
-    return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)
+    return render_template("searched.html", name=name, items=df)
+    #return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)
