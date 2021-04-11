@@ -112,13 +112,13 @@ def renderHome(name):
 def search():
     try:
         show_name = request.form['inputName']
-        #print(_name, _password)
+        print(show_name)
 
         # validate the received values
         print('smthing')
         if show_name:
             #data = request.get_json()
-            if lookup(show_name):
+            if db_helper.lookup(show_name):
                 print(lookup(show_name))
     
             result = {'success': False, 'response': 'Done'}
