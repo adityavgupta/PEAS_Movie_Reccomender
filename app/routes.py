@@ -107,3 +107,24 @@ def signIn():
 @app.route('/renderHome')
 def renderHome(name):
     return render_template("home.html", name=name)
+
+@app.route('/search',methods=['POST'])
+def search():
+    try:
+        show_name = request.form['inputName']
+        #print(_name, _password)
+
+        # validate the received values
+        print('smthing')
+        if show_name:
+            #data = request.get_json()
+            if lookup(show_name):
+                print(lookup(show_name))
+    
+            result = {'success': False, 'response': 'Done'}
+            return jsonify(result)
+        else:
+            return jsonify({'html':'<span>Enter the required fields</span>'})
+
+    except Exception as e:
+        return jsonify({'error':str(e)})

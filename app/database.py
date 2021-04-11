@@ -148,3 +148,14 @@ def verify_user_info(_name:str,_password:str)->int:
     #     text, "Todo")
     conn.close()
     return 1
+
+def lookup(name:str):
+    result = None
+    conn = db.connect()
+    try:
+        query = '(SELECT m.name, "Movie" as  type from movie_rec.movie m where m.name like '%"{}"%' order by m.popularity limit 5) union (SELECT t.name, "TV_Show" as  type from movie_rec.tv_show t where t.name like '%time%' order by t.popularity limit 5);'.format(name)
+        result = conn.execute(query).fetchall()
+        print(result)
+    except:
+        print("Nothing found")
+    return result
