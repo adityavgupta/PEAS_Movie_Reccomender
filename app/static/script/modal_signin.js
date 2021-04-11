@@ -3,7 +3,7 @@ $(function() {
         $.ajax({
             url: '/signIn',
             data: $('form').serialize(),
-            type: 'GET',
+            type: 'POST',
             success: function(response) {
                 console.log(response);
             },

@@ -83,18 +83,20 @@ def signUp():
     except Exception as e:
         return jsonify({'error':str(e)})
 
-@app.route('/signIn',methods=['GET'])
+@app.route('/signIn',methods=['POST'])
 def signIn():
     try:
         _name = request.form['inputName']
         _password = request.form['inputPassword']
-        print(_name, _password)
+        #print(_name, _password)
 
         # validate the received values
         if _name and _password:
             data = request.get_json()
-            if not db_helper.verify_user_info(_name,_password):
-                return render_template("signin.html")
+            if db_helper.verify_user_info(_name,_password) == 0:
+                print("redirecting...")
+                renderHome()
+                print("after user home")
             result = {'success': False, 'response': 'Done'}
             return jsonify(result)
         else:
@@ -103,4 +105,6 @@ def signIn():
     except Exception as e:
         return jsonify({'error':str(e)})
 
-    
+@app.route('/renderHome')
+def renderHome():
+    return render_template("home.html")

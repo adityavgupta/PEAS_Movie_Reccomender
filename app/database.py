@@ -125,13 +125,16 @@ def verify_user_info(_name:str,_password:str)->int:
     Returns: The task ID for the inserted entry
     """
     conn = db.connect()
+    
     ##change:verify user info
     try:
         #verify if user exist
-        user_id=conn.execute("SELECT Users.user_id FROM Users WHERE Users.name={};").format(_name).fetchall()[0][0]
-        # print(user_id)
+        query_uid = 'SELECT Users.user_id FROM Users WHERE Users.name="{}";'.format(_name)
+        user_id=conn.execute(query_uid).fetchall()[0][0]
         #verify password
-        pswd = conn.execute("SELECT Users.passwd FROM Users WHERE Users.name={};").format(_name).fetchall()[0][0]
+        query_pwd = 'SELECT Users.passwd FROM Users WHERE Users.name="{}";'.format(_name)
+        pswd = conn.execute(query_pwd).fetchall()[0][0]
+        
         if pswd == _password:
             return 0
         else:
