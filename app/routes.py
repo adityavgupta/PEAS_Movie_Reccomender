@@ -127,7 +127,7 @@ def search():
                 #print(result)
                 #result = [[x[0],x[1]] for x in result]
                 #df = pd.DataFrame(result,columns=['Show/Movie Name','Type'])
-                keys=('Name','Type')
+                keys=('Name','Title_id', 'Type')
                 df = [dict(zip(keys, values)) for values in result]
                 #html = df.to_html()
                 #print(df)
@@ -151,12 +151,23 @@ def review():
         print(request.form)
         username = request.form.getlist('user_name')[0]
         showname = request.form.getlist('showname')[0]
-        return renderReview(username, showname)
+        title_id = request.form.getlist('title_id')[0]
+        return renderReview(username, showname,title_id)
 
     except Exception as e:
         return jsonify({'error':str(e)})
 
 @app.route('/renderReview')
-def renderReview(username, showname):
-    return render_template("review.html", username=username, showname=showname)
+def renderReview(username, showname,title_id):
+    return render_template("review.html", username=username, showname=showname, titleid=title_id)
     #return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)
+
+@app.route('/submitReview',methods=['POST'])
+def submitReview():
+    try:
+        print(request.form)
+        rating = request.form['inputScore']
+        review = request.form['inputReview']
+
+    except Exception as e:
+        return jsonify({'error':str(e)})

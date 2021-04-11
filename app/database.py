@@ -153,9 +153,9 @@ def lookup(name:str):
     result = None
     conn = db.connect()
     try:
-        query = '(SELECT m.name, "Movie" as type from movie m where m.name LIKE "%%{}%%" ORDER BY m.popularity LIMIT 10)\
+        query = '(SELECT m.name,m.title_id, "Movie" as type from movie m where m.name LIKE "%%{}%%" ORDER BY m.popularity LIMIT 10)\
                  UNION \
-                (SELECT t.name, "TV Show" as type from tv_show t where t.name LIKE "%%{}%%" ORDER BY t.popularity LIMIT 10)'.format(name, name)
+                (SELECT t.name, t.title_id, "TV Show" as type from tv_show t where t.name LIKE "%%{}%%" ORDER BY t.popularity LIMIT 10)'.format(name, name)
         #print(query)
         result = conn.execute(query).fetchall()
         #print(result)
