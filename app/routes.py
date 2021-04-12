@@ -387,3 +387,8 @@ def searchReview():
 def renderSearchedReview(df, name):
     return render_template("review_search.html", name=name, items=df)
 
+@app.route('/goHome',methods=['POST'])
+def goHome():
+    username = request.form.getlist('name')[0]
+    return renderHome(username)
+
