@@ -277,8 +277,6 @@ def lookup(name:str, platform:str, date:str):
             platform_where += 'WHERE platform LIKE "%%'+strn+'%%" '
         else:
             platform_where += 'or platform LIKE "%%'+strn+'%%" '
-
-    conn.close()
     
     try:
         query = 'SELECT title_name, type_mt, mtitle_id, pop, ar, platform\
@@ -291,6 +289,7 @@ def lookup(name:str, platform:str, date:str):
        
     except Exception as e:
         print(e)
+    conn.close()
     return result
 
 def paulQuery():
