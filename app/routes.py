@@ -183,3 +183,56 @@ def submitReview():
 
     except Exception as e:
         return jsonify({'error':str(e)})
+
+@app.route('/renderWatched')
+def renderWatched():
+    return render_template("watched.html")
+
+@app.route('/renderWatched_delete')
+def renderWatched_delete():
+    return render_template("watched_delete.html")
+
+@app.route('/renderEmma')
+def renderemma():
+    result = db_helper.emma_advanced_query()
+    keys=('_id','Score')
+    df = [dict(zip(keys, values)) for values in result]
+    return render_template("emma.html", items=df)
+
+@app.route('/watched',methods=['POST'])
+def watched():
+    print("no")
+    try:
+        username = request.form['inputUsername']
+        list_of_movies = request.form['inputMovies']
+        list_of_tv_shows = request.form['inputTvShows']
+        list_of_tv_show_impressions = request.form['inputTvShowImpressions']
+        list_of_movie_impressions = request.form['inputMovieImpressions']
+
+        # validate the received values
+        if username and list_of_movies and list_of_tv_shows and list_of_tv_show_impressions and list_of_movie_impressions:
+            data = request.get_json()
+            db_helper.insert_into_watched(username, list_of_movies, list_of_tv_shows, list_of_tv_show_impressions, list_of_movie_impressions)
+            result = {'success': True, 'response': 'Done'}
+            return jsonify(result)
+        else:
+            return jsonify({'html':'<span>Enter the required fields</span>'})
+
+    except Exception as e:
+        return jsonify({'error':str(e)})
+
+@app.route('/w_deleted',methods=['POST'])
+def w_deleted():
+    try:
+        username = request.form['deleteUsername']
+        movie = request.form['deleteMovieImpression']
+        tv_show = request.form['deleteTvShowImpressions']
+        print("hai", username)
+
+        data = request.get_json()
+        db_helper.delete_from_watched(username, movie, tv_show)
+        result = {'success': True, 'response': 'Done'}
+
+    except Exception as e:
+        return jsonify({'error':str(e)})
+
