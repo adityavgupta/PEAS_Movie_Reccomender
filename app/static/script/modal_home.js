@@ -18,4 +18,23 @@ $(function() {
             }
         });
     });
+
+    $('#btnPaulQuery').click(function() {
+        // console.log('smthing')
+        $.ajax({
+            url: '/paulQuery',
+            type: 'GET',
+            dataType: 'text',
+            success: function(response) {
+                console.log(response);
+                document.open();
+                document.write(`${response}`);
+                document.close();
+                
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
 });
