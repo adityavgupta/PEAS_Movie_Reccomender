@@ -116,24 +116,30 @@ def search():
         print(request.form)
         print(request.form.getlist('name'))
         #name = request.form[0][1]
-        show_name = request.form.getlist('form')[0].split('=')[-1]
+        inputs = request.form.getlist('form')[0].split('&')
+        split_inputs = [x.split('=') for x in inputs]
+        params = dict()
+
+        for i in split_inputs:
+            if i[0] in params:
+                params[i[0]] += (','+i[1])
+            else:
+                params[i[0]] = i[1]
+
+        show_name = params['inputName']
+        show_platform = params['platform']
+        show_start_date = params['inputStartDate']
         name = request.form.getlist('name')[0]
+
         # validate the received values
-        #print(show_name, name)
-        if show_name:
-            #data = request.get_json()
-            result = db_helper.lookup(show_name)
+        if show_name or show_platform or show_start_date:
+            result = db_helper.lookup(show_name, show_platform, show_start_date)
             if result:
-                #print(result)
-                #result = [[x[0],x[1]] for x in result]
-                #df = pd.DataFrame(result,columns=['Show/Movie Name','Type'])
-                keys=('Name','Type')
+                keys=('Name','Type','Popularity', 'AverageRating','Platform')
                 df = [dict(zip(keys, values)) for values in result]
-                #html = df.to_html()
-                #print(df)
+                print(df)
                 return renderSearched(df,name)
-            #result = {'success': False, 'response': 'Done'}
-            #return jsonify({'html':html})
+            
         else:
             return jsonify({'html':'<span>Enter the required fields</span>'})
 
