@@ -116,31 +116,24 @@ def search():
         print(request.form)
         print(request.form.getlist('name'))
         #name = request.form[0][1]
-        inputs = request.form.getlist('form')[0].split('&')
-        split_inputs = [x.split('=') for x in inputs]
-        params = dict()
-
-        params['platform'] = ''
-        for i in split_inputs:
-            if i[0] in params:
-                params[i[0]] += (','+i[1])
-            else:
-                params[i[0]] = ''+i[1]
-        #print(params)
-        show_name = params['inputName']
-        show_platform = params['platform']
-        show_start_date = params['inputStartDate']
+        show_name = request.form.getlist('form')[0].split('=')[-1]
         name = request.form.getlist('name')[0]
-
         # validate the received values
-        if show_name or show_platform or show_start_date:
-            result = db_helper.lookup(show_name, show_platform, show_start_date)
+        #print(show_name, name)
+        if show_name:
+            #data = request.get_json()
+            result = db_helper.lookup(show_name)
             if result:
-                keys=('Name','Type','Title_id','Popularity', 'AverageRating','Platform')
+                #print(result)
+                #result = [[x[0],x[1]] for x in result]
+                #df = pd.DataFrame(result,columns=['Show/Movie Name','Type'])
+                keys=('Name','Type')
                 df = [dict(zip(keys, values)) for values in result]
+                #html = df.to_html()
                 #print(df)
                 return renderSearched(df,name)
-            
+            #result = {'success': False, 'response': 'Done'}
+            #return jsonify({'html':html})
         else:
             return jsonify({'html':'<span>Enter the required fields</span>'})
 
@@ -155,31 +148,68 @@ def renderSearched(df, name):
 @app.route('/review',methods=['POST'])
 def review():
     try:
-        #print(request.form)
+        print(request.form)
         username = request.form.getlist('user_name')[0]
         showname = request.form.getlist('showname')[0]
-        title_id = request.form.getlist('title_id')[0]
-        return renderReview(username, showname,title_id)
+        return renderReview(username, showname)
 
     except Exception as e:
         return jsonify({'error':str(e)})
 
 @app.route('/renderReview')
-def renderReview(username, showname,titleid):
-    return render_template("review.html", username=username, showname=showname, titleid=titleid)
+def renderReview(username, showname):
+    return render_template("review.html", username=username, showname=showname)
     #return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)
 
-@app.route('/submitReview',methods=['POST'])
-def submitReview():
-    try:
-        print(request.form)
-        user_name = request.form.getlist('user_name')[0]
-        rating = request.form.getlist('rating')[0]
-        review = request.form.getlist('review')[0]
-        print(rating, review)
-        ##call helper function from database.py
+@app.route('/renderWatched')
+def renderWatched():
+    return render_template("watched.html")
 
-        return renderHome(user_name)
+@app.route('/renderWatched_delete')
+def renderWatched_delete():
+    return render_template("watched_delete.html")
+
+@app.route('/renderEmma')
+def renderemma():
+    result = db_helper.emma_advanced_query()
+    keys=('_id','Score')
+    df = [dict(zip(keys, values)) for values in result]
+    return render_template("emma.html", items=df)
+
+@app.route('/watched',methods=['POST'])
+def watched():
+    print("no")
+    try:
+        username = request.form['inputUsername']
+        list_of_movies = request.form['inputMovies']
+        list_of_tv_shows = request.form['inputTvShows']
+        list_of_tv_show_impressions = request.form['inputTvShowImpressions']
+        list_of_movie_impressions = request.form['inputMovieImpressions']
+
+        # validate the received values
+        if username and list_of_movies and list_of_tv_shows and list_of_tv_show_impressions and list_of_movie_impressions:
+            data = request.get_json()
+            db_helper.insert_into_watched(username, list_of_movies, list_of_tv_shows, list_of_tv_show_impressions, list_of_movie_impressions)
+            result = {'success': True, 'response': 'Done'}
+            return jsonify(result)
+        else:
+            return jsonify({'html':'<span>Enter the required fields</span>'})
+
+    except Exception as e:
+        return jsonify({'error':str(e)})
+
+@app.route('/w_deleted',methods=['POST'])
+def w_deleted():
+    print("ok")
+    try:
+        username = request.form['deleteUsername']
+        movie = request.form['deleteMovieImpression']
+        tv_show = request.form['deleteTvShowImpressions']
+        print("hai", username)
+
+        data = request.get_json()
+        db_helper.delete_from_watched(username, movie, tv_show)
+        result = {'success': True, 'response': 'Done'}
 
     except Exception as e:
         return jsonify({'error':str(e)})
