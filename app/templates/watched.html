@@ -7,6 +7,12 @@
     <link href="../static/styles/signup.css" rel="stylesheet">
     <script src="../static/script/jquery-1.11.2.js"></script>
     <script src="../static/script/modal_watched.js"></script>
+    <style>
+      input {
+        width: 100%;
+        clear: both;
+      }
+    </style>
   </head>
   <body>
       <div class="jumbotron">
@@ -24,8 +30,40 @@
          
         <button id="btnSubmit" class="btn btn-lg btn-primary btn-block" type="button">Submit</button>
         <button id="btnUpdate" class="btn btn-lg btn-primary btn-block" type="button">Update</button>
+        <button id="btnLookup" class="btn btn-lg btn-primary btn-block" type="button">Search</button>
       </form>
       </div>
+      
+      <div>
+        {% if items %}
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="Name">Name</th>
+                <th class="Type">Type</th>
+                <th class="Watched">Watched or not</th>
+                <th class="Impression">User's Impression</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{item.Name}}</td>
+                    <td>{{item.Type}}</td>
+                    <td>{{item.Watched}}</td>
+                    <td>{{item.Impression}}</td>
+                </tr>
+            {% endfor %}
+            
+            </tbody>
+        </table>
+        {% endif %}
+  </div>
+
+
+
+
       <footer class="footer">
         <p>&copy; Company 2015</p>
       </footer>

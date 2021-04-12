@@ -157,6 +157,8 @@ def update_review(uname:str,title_id:str,type_id:str,rating:str,review:str)->int
     return 0
 
 def insert_into_watched(username:str,list_of_movies:str,list_of_tv_shows:str,list_of_tv_show_impressions:str,list_of_movie_impressions:str)->int:
+    print('insert_into_watched is being executed')
+    print(list_of_movies,list_of_movie_impressions,list_of_tv_shows,list_of_tv_show_impressions)
     conn = db.connect()
     try:
         #verify if user exist
@@ -164,37 +166,139 @@ def insert_into_watched(username:str,list_of_movies:str,list_of_tv_shows:str,lis
         user_id=conn.execute(query_uid).fetchall()[0][0]
         print(user_id)
 
-        movies_list = list_of_movies.split(",")
-        tv_list = list_of_tv_shows.split(",")
-        tm_imp_list = list_of_tv_show_impressions.split(",")
-        movie_imp_list = list_of_movie_impressions.split(",")
+        if(list_of_movies):
+            movies_list = list_of_movies.split(",")
+            movie_imp_list = list_of_movie_impressions.split(",")
 
-        for i in range(len(movies_list)):
-            query_mid = 'SELECT Movie.title_id FROM Movie WHERE Movie.name="{}";'.format(movies_list[i])
-            movie_id=conn.execute(query_mid).fetchall()[0][0]
-            insertion = 'INSERT INTO WATCHED_M VALUES("{}",{});'.format(movie_id, user_id)
-            #conn.execute(insertion)
-            if i < len(movie_imp_list):
-                i_insertion = 'INSERT INTO Impressions_M VALUES("{}",{},{});'.format(movie_id, user_id, movie_imp_list[i])
-                print("i_insertion", i_insertion)
-                #conn.execute(i_insertion)
-        
-        print("wanna do something col")
-        for i in range(len(tv_list)):
-            query_tid = 'SELECT TV_Show.title_id FROM TV_Show WHERE TV_Show.name="{}";'.format(tv_list[i])
-            tv_id=conn.execute(query_tid).fetchall()[0][0]
-            insertion = 'INSERT INTO WATCHED_T VALUES("{}",{});'.format(tv_id,user_id)
-            #conn.execute(insertion)
-            if i < len(tv_imp_list):
-                i_insertion = 'INSERT INTO Impressions_T VALUES("{}",{},{});'.format(tv_id, user_id, tv_imp_list[i])
-                conn.execute(i_insertion)
-        conn.close()
+            for i in range(len(movies_list)):
+                query_mid = 'SELECT Movie.title_id FROM Movie WHERE Movie.name="{}";'.format(movies_list[i])
+                movie_id=conn.execute(query_mid).fetchall()[0][0]
+                insertion = 'INSERT INTO WATCHED_M VALUES("{}",{});'.format(movie_id, user_id)
 
+                conn.execute(insertion)
+                if i < len(movie_imp_list):
+                    i_insertion = 'INSERT INTO Impressions_M VALUES("{}",{},{});'.format(movie_id, user_id, movie_imp_list[i])
+                    print("i_insertion", i_insertion)
+                    conn.execute(i_insertion)
     except:
+        try:
+            update_watched(username,list_of_movies,[],[],list_of_movie_impressions)
+        except Exception as o:
+            print('secondary update '+o)
+
+    try:
+        if(list_of_tv_shows):
+            tv_imp_list = list_of_tv_show_impressions.split(",")
+            tv_list = list_of_tv_shows.split(",")
+            print(tv_list,tv_imp_list)
+            for i in range(len(tv_list)):
+                query_tid = 'SELECT TV_Show.title_id FROM TV_Show WHERE TV_Show.name="{}";'.format(tv_list[i])
+                tv_id=conn.execute(query_tid).fetchall()[0][0]
+                insertion = 'INSERT INTO WATCHED_T VALUES("{}",{});'.format(tv_id,user_id)
+                #print(insertion)
+                conn.execute(insertion)
+                if i < len(tv_imp_list):
+                    i_insertion = 'INSERT INTO Impressions_T VALUES("{}",{},{});'.format(tv_id, user_id, tv_imp_list[i])
+                    print(i_insertion)
+                    conn.execute(i_insertion)
+    except:
+        try:
+            update_watched(username,[],list_of_tv_shows,list_of_tv_show_impressions,[])
+        except Exception as o:
+            print('secondary update '+o)
+    conn.close()
+    return 1
+
+    # except Exception as e:
+    #     try:
+    #         update_watched(username,list_of_movies,list_of_tv_shows,list_of_tv_show_impressions,list_of_movie_impressions)
+    #     except Exception as o:
+    #         print('secondary update '+o)
+
+
+def update_watched(username:str,list_of_movies:str,list_of_tv_shows:str,list_of_tv_show_impressions:str,list_of_movie_impressions:str)->int:
+    print('update_watched is being executed')
+    conn = db.connect()
+    try:
+        #verify if user exist
+        query_uid = 'SELECT Users.user_id FROM Users WHERE Users.name="{}";'.format(username)
+        user_id=conn.execute(query_uid).fetchall()[0][0]
+        print(user_id)
+        if list_of_movies:
+            movies_list = list_of_movies.split(",")
+            movie_imp_list = list_of_movie_impressions.split(",")
+            print(movies_list)
+            for i in range(len(movies_list)):
+                query_mid = 'SELECT Movie.title_id FROM Movie WHERE Movie.name="{}";'.format(movies_list[i])
+                # print('movie_id: ')
+                movie_id=conn.execute(query_mid).fetchall()[0][0]
+                # print(movie_id)
+                #insertion = 'UPDATE WATCHED_M SET user_id={} WHERE title_id="{}";'.format(movie_id, user_id)
+                #conn.execute(insertion)
+                if i < len(movie_imp_list):
+                    i_insertion = 'UPDATE Impressions_M SET impression={} WHERE title_id="{}" AND user_id={};'.format(movie_imp_list[i],movie_id, user_id)
+                    #print("i_insertion", i_insertion)
+                    conn.execute(i_insertion)
+        print('Loop one passed')
+
+        if list_of_tv_shows:
+            tv_imp_list = list_of_tv_show_impressions.split(",")
+            tv_list = list_of_tv_shows.split(",")
+
+            for i in range(len(tv_list)):
+                query_tid = 'SELECT TV_Show.title_id FROM TV_Show WHERE TV_Show.name="{}";'.format(tv_list[i])
+                print(query_tid)
+                print('tv_id: ')
+                tv_id=conn.execute(query_tid).fetchall()[0][0]
+                print(tv_id)
+                # insertion = 'UPDATE WATCHED_T SET user_id={} WHERE title_id="{}";'.format(tv_id,user_id)
+                # conn.execute(insertion)
+                if i < len(tv_imp_list):
+                    i_insertion = 'UPDATE Impressions_T SET impression={} WHERE title_id="{}" AND user_id={};'.format(tv_imp_list[i],tv_id, user_id)
+                    conn.execute(i_insertion)
+        conn.close()
+        return 0
+
+    except Exception as e:
         #user doesn't exist
         conn.close()
-        print("could not carry out request")
+        print(e)
         return 1
+def lookup_watched(username:str,list_of_movies:str,list_of_tv_shows:str):
+    conn = db.connect()
+    results = []
+    imp_val = {-1:'Bad',0:'Meh',1:"Good"}
+    try:
+        #verify if user exist
+        query_uid = 'SELECT Users.user_id FROM Users WHERE Users.name="{}";'.format(username)
+        user_id=conn.execute(query_uid).fetchall()[0][0]
+        if list_of_movies:
+            for movie in list_of_movies.split(','):
+                try:
+                    query_impression = 'SELECT im.impression FROM impressions_m im WHERE im.user_id = {} AND im.title_id = (SELECT Movie.title_id FROM Movie WHERE Movie.name="{}");'.format(user_id,movie)
+                    #print(query_impression)
+                    impression = conn.execute(query_impression).fetchall()[0][0]
+                    results.append([movie,'Movie','Yes',imp_val[impression]])
+                except:
+                     results.append([movie,'Movie','No','N/A'])
+        
+
+
+        if list_of_tv_shows:
+            for tv_show in list_of_tv_shows.split(','):
+                try:
+                    query_impression = 'SELECT im.impression FROM impressions_t im WHERE im.user_id = {} AND im.title_id = (SELECT TV_Show.title_id FROM TV_Show WHERE TV_Show.name="{}");'.format(user_id,tv_show)
+                    #print(query_impression)
+                    impression = conn.execute(query_impression).fetchall()[0][0]
+                    results.append([tv_show,'TVShow','Yes',imp_val[impression]])
+                except:
+                    results.append([tv_show,'TVShow','No','N/A'])
+
+        return results
+
+    except Exception as e:
+        print(e)        
+
 
 def delete_from_watched(username:str,movie:str,tv_show:str)->int:
     print("yooo")
