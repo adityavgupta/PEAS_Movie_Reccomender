@@ -168,9 +168,11 @@ def insert_into_watched(username:str,list_of_movies:str,list_of_tv_shows:str,lis
             if i < len(tv_imp_list):
                 i_insertion = 'INSERT INTO Impressions_T VALUES("{}",{},{});'.format(tv_id, user_id, tv_imp_list[i])
                 conn.execute(i_insertion)
+        conn.close()
 
     except:
         #user doesn't exist
+        conn.close()
         print("could not carry out request")
         return 1
 
@@ -197,10 +199,12 @@ def delete_from_watched(username:str,movie:str,tv_show:str)->int:
             conn.execute(delete_impression_t)
             delete_watched_t = 'DELETE FROM WATCHED_T WHERE title_id LIKE "{}" AND user_id LIKE {};'.format(tv_id, user_id)
             conn.execute(delete_impression_t)
+        conn.close()
 
     except:
         #user doesn't exist
         print("could not carry out request")
+        conn.close()
         return 1
 
 def emma_advanced_query():
@@ -219,6 +223,7 @@ def emma_advanced_query():
         #print(result)
     except Exception as e:
         print(e)
+    conn.close()
     return result
 
 def verify_user_info(_name:str,_password:str)->int:
@@ -272,6 +277,8 @@ def lookup(name:str, platform:str, date:str):
             platform_where += 'WHERE platform LIKE "%%'+strn+'%%" '
         else:
             platform_where += 'or platform LIKE "%%'+strn+'%%" '
+
+    conn.close()
     
     try:
         query = 'SELECT title_name, type_mt, mtitle_id, pop, ar, platform\
@@ -284,5 +291,18 @@ def lookup(name:str, platform:str, date:str):
        
     except Exception as e:
         print(e)
-    
     return result
+
+def paulQuery():
+    conn = db.connect()
+    try:
+        query = 'select movie.release_year, AVG(movie.avg_rating) as avg_ratings, "Movie" as type from movie group by movie.release_year union select tv_show.start_year, AVG(tv_show.avg_rating) as avg_ratings, "TV" as type from tv_show group by tv_show.start_year'
+        print(query)
+        result = conn.execute(query).fetchall()
+        print(result)
+        return result
+    except Exception as e:
+        print(e)
+    conn.close()
+    return result
+

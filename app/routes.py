@@ -181,6 +181,7 @@ def submitReview():
         type_ = request.form.getlist('type')[0]
         ##call helper function from database.py
         db_helper.insert_new_review(user_name, title_id, type_, rating, review)
+
         return renderHome(user_name)
 
     except Exception as e:
@@ -237,4 +238,30 @@ def w_deleted():
 
     except Exception as e:
         return jsonify({'error':str(e)})
+
+@app.route('/paulQuery',methods=['GET'])
+def paulQuery():
+    try:
+        result = db_helper.paulQuery()
+        ret_result = []
+        if result:
+            for row in result:
+                print(round(row[1],2))
+                return_row = tuple((row[0],str(round(row[1],2)),row[2]))
+                if row[0] != '\\N' and row[0] != '0':
+                    ret_result.append(return_row)
+            #ret_result = [tuple(x if isinstance(x, str) else round(x,2) for x in row) for row in result]
+            # for one in ret_result:
+            #     one[1] = round(one[1],2)
+            print(ret_result)
+            keys=('Year','avgRating','Type')
+            df = [dict(zip(keys, values)) for values in ret_result]
+            return renderPaulQuery(df)
+        return jsonify({'error':'Nothing found'})
+    except:
+        return jsonify({'error':str(e)})
+
+@app.route('/renderPaulQuery')
+def renderPaulQuery(result):
+    return render_template('Paul.html',items=result)
 

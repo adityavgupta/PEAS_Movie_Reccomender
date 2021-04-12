@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Movie Recommender</title>
+    <!-- <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet"> -->
+    <link href="../static/styles/signup.css" rel="stylesheet">
+    <script src="../static/script/jquery-1.11.2.js"></script>
+
+  </head>
+  <body>
+ 
+    <div class="container">
+      <div class="header">
+        <nav>
+            <div class="topnav">
+                <p>Here are the average score for all the tvshow and movies each year!</p>
+                <div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th class="Name">Year</th>
+                            <th class="Type">Average Rating</th>
+                            <th class="Type">Type</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>{{item.Year}}</td>
+                                <td>{{item.avgRating}}</td>
+                                <td>{{item.Type}}</td>
+                            </tr>
+                        {% endfor %}
+                        
+                        </tbody>
+                    </table>
+              </div>
+        </nav>
+      </div>
+ 
+    </div>
+  </body>
+</html>
