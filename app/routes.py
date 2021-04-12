@@ -126,7 +126,7 @@ def search():
                 params[i[0]] += (','+i[1])
             else:
                 params[i[0]] = ''+i[1]
-        print(params)
+        #print(params)
         show_name = params['inputName']
         show_platform = params['platform']
         show_start_date = params['inputStartDate']
@@ -136,9 +136,9 @@ def search():
         if show_name or show_platform or show_start_date:
             result = db_helper.lookup(show_name, show_platform, show_start_date)
             if result:
-                keys=('Name','Type','Popularity', 'AverageRating','Platform')
+                keys=('Name','Type','Title_id','Popularity', 'AverageRating','Platform')
                 df = [dict(zip(keys, values)) for values in result]
-                print(df)
+                #print(df)
                 return renderSearched(df,name)
             
         else:
@@ -155,7 +155,7 @@ def renderSearched(df, name):
 @app.route('/review',methods=['POST'])
 def review():
     try:
-        print(request.form)
+        #print(request.form)
         username = request.form.getlist('user_name')[0]
         showname = request.form.getlist('showname')[0]
         title_id = request.form.getlist('title_id')[0]
@@ -165,16 +165,21 @@ def review():
         return jsonify({'error':str(e)})
 
 @app.route('/renderReview')
-def renderReview(username, showname,title_id):
-    return render_template("review.html", username=username, showname=showname, titleid=title_id)
+def renderReview(username, showname,titleid):
+    return render_template("review.html", username=username, showname=showname, titleid=titleid)
     #return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)
 
 @app.route('/submitReview',methods=['POST'])
 def submitReview():
     try:
         print(request.form)
-        rating = request.form['inputScore']
-        review = request.form['inputReview']
+        user_name = request.form.getlist('user_name')[0]
+        rating = request.form.getlist('rating')[0]
+        review = request.form.getlist('review')[0]
+        print(rating, review)
+        ##call helper function from database.py
+
+        return renderHome(user_name)
 
     except Exception as e:
         return jsonify({'error':str(e)})
