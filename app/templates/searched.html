@@ -21,14 +21,42 @@
                 <p>Look up a movie or TVshow</p>
                 <form class="form-signin">
                 <input type="name" name="inputName" id="inputName" class="form-control" placeholder="Name" required autofocus>
+                <fieldset>
+                  <legend>Filter by Platform</legend>
+                    <div>
+                      <input type="checkbox" id="netflix" name="platform" value="netflix">
+                      <label for="netlix">Netflix</label>
+                    </div>
+                    <div>
+                      <input type="checkbox" id="hulu" name="platform" value="hulu">
+                      <label for="hulu">Hulu</label>
+                    </div>
+                    <div>
+                      <input type="checkbox" id="prime" name="platform" value="prime">
+                      <label for="prime">Prime Video</label>
+                    </div>
+                    <div>
+                      <input type="checkbox" id="disney" name="platform" value="disney">
+                      <label for="disney">Disney</label>
+                    </div>
+                </fieldset>
+                <div>
+                  <label for="inputStartDate" class="sr-only">Release Year or Start Date</label>
+                  <input type="startDate" name="inputStartDate" id="inputStartDate" class="form-control form-control-sm" placeholder="YYYY-MM-DD">
+                </div>
                 <button id="btnSearch" class="btn btn-lg btn-primary btn-block" type="button">Search</button>
+
                 </form>
+
                 <div>
                     <table class="table">
                         <thead>
                         <tr>
                             <th class="Name">Name</th>
                             <th class="Type">Type</th>
+                            <th class="Popularity">Popularity</th>
+                            <th class="AverageRating">Average Rating</th>
+                            <th class="Platform">Platform</th>
                             <th class="update"></th>
                         </tr>
                         </thead>
@@ -38,6 +66,9 @@
                             <tr>
                                 <td>{{item.Name}}</td>
                                 <td>{{item.Type}}</td>
+                                <td>{{item.Popularity}}</td>
+                                <td>{{item.AverageRating}}</td>
+                                <td>{{item.Platform}}</td>
                                 <td><button type="button" class="btnReview" data-source="{{name}}" data-titleid="{{item.Title_id}}" data-content="{{item.Name}}">Review</button></td>
                             </tr>
                         {% endfor %}

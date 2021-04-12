@@ -149,16 +149,46 @@ def verify_user_info(_name:str,_password:str)->int:
     conn.close()
     return 1
 
-def lookup(name:str):
+def lookup(name:str, platform:str, date:str):
     result = None
     conn = db.connect()
+    platforms = platform.split(',') # ['Netflix', 'Hulu', 'Prime', 'Disney']
+    year = date.split('-')[0]
+    movie_where = 'WHERE release_year > "{}"'.format(year)
+    tv_where = 'WHERE CAST(start_year as unsigned) > "{}"'.format(year)
+    if name:
+        movie_where += ' AND (m.name LIKE "%%{}%%")'.format(name)
+        tv_where += ' AND (t.name LIKE "%%{}%%")'.format(name)
+
+    platform_where = 'WHERE (platform LIKE'
+    for i in range(len(platforms)):
+        strn = platforms[i]
+        if i == 0:
+            platform_where += ' "%%'+strn+'%%" '
+        else:
+            platform_where += 'or platform LIKE "%%'+strn+'%%" '
+    platform_where += ') '
+
+    
+    #print(platform_where)
     try:
-        query = '(SELECT m.name,m.title_id, "Movie" as type from movie m where m.name LIKE "%%{}%%" ORDER BY m.popularity LIMIT 10)\
+        query = '(SELECT m.name, "Movie" as type from movie m where m.name LIKE "%%{}%%" ORDER BY m.popularity LIMIT 10)\
                  UNION \
-                (SELECT t.name, t.title_id, "TV Show" as type from tv_show t where t.name LIKE "%%{}%%" ORDER BY t.popularity LIMIT 10)'.format(name, name)
-        #print(query)
+                (SELECT t.name, "TV Show" as type from tv_show t where t.name LIKE "%%{}%%" ORDER BY t.popularity LIMIT 10)'.format(name, name)
+        print(query)
+        # query = 'SELECT title_name, type_mt, pop, ar, platform\
+        #     FROM ((SELECT m.name as title_name, m.type_id as type_mt, m.popularity as pop, avg_rating as ar, available_on as platform\
+        #          FROM movie m '+movie_where+' ORDER BY m.popularity DESC LIMIT 500) UNION\
+        #             (SELECT t.name, t.type_id, t.popularity, avg_rating, available_on FROM tv_show t'+tv_where+' ORDER BY t.popularity DESC LIMIT 500)) AS topmt\
+        #             '+platform_where+' ORDER BY ar DESC;'.format(date,name,date,name)
+        query = 'SELECT title_name, type_mt, pop, ar, platform\
+            FROM(\
+            (SELECT m.name as title_name, m.type_id as type_mt, m.popularity as pop, avg_rating as ar, available_on as platform FROM movie m '+movie_where+' ORDER BY m.popularity DESC LIMIT 20)\
+                UNION\
+                (SELECT t.name, t.type_id, t.popularity, avg_rating, available_on FROM tv_show t '+tv_where+' ORDER by popularity DESC LIMIT 20)) AS topmt\
+                '+platform_where+'ORDER BY ar DESC;'
         result = conn.execute(query).fetchall()
-        #print(result)
+       
     except Exception as e:
         print(e)
     return result
