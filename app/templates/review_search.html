@@ -45,6 +45,7 @@
                             <th class="Type">Type</th>
                             <th class="Score">Score</th>
                             <th class="Review">Review</th>
+                            <th class="AvgScore">Average Rating</th>
                             <th class="update"></th>
                             <th class="delete"></th>
                         </tr>
@@ -57,6 +58,7 @@
                                 <td>{{item.Type}}</td>
                                 <td>{{item.Score}}</td>
                                 <td>{{item.Review}}</td>
+                                <td>{{item.AverageRating}}</td>
                                 <td><button type="button" class="btnUpdateReview" data-source="{{name}}" data-titleid="{{item.Title_id}}" data-type="{{item.Type}}" data-content="{{item.Title}}">Update Review</button></td>
                                 <td><button type="button" class="btnDeleteReview" data-source="{{name}}" data-titleid="{{item.Title_id}}" data-type="{{item.Type}}" data-content="{{item.Title}}">Delete Review</button></td>
                             </tr>
