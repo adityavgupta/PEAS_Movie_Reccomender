@@ -350,7 +350,7 @@ def delete_from_watched(username:str,movie:str,tv_show:str)->int:
             delete_impression_m = 'DELETE FROM Impressions_M WHERE title_id LIKE "{}" AND user_id LIKE {};'.format(movie_id, user_id)
             conn.execute(delete_impression_m)
             delete_watched_m = 'DELETE FROM WATCHED_M WHERE title_id LIKE "{}" AND user_id LIKE {};'.format(movie_id, user_id)
-            conn.execute(delete_impression_m)
+            conn.execute(delete_watched_m)
 
         if tv_show != None:
             query_tid = 'SELECT TV_Show.title_id FROM TV_Show WHERE TV_Show.name="{}";'.format(tv_show)
@@ -358,7 +358,7 @@ def delete_from_watched(username:str,movie:str,tv_show:str)->int:
             delete_impression_t = 'DELETE FROM Impressions_T WHERE title_id LIKE "{}" AND user_id LIKE {};'.format(tv_id, user_id)
             conn.execute(delete_impression_t)
             delete_watched_t = 'DELETE FROM WATCHED_T WHERE title_id LIKE "{}" AND user_id LIKE {};'.format(tv_id, user_id)
-            conn.execute(delete_impression_t)
+            conn.execute(delete_watched_t)
         conn.close()
 
     except:
