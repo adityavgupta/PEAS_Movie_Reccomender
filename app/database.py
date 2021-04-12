@@ -156,6 +156,25 @@ def update_review(uname:str,title_id:str,type_id:str,rating:str,review:str)->int
     conn.close()
     return 0
 
+def delete_review(uname:str,show_name:str,title_id:str,type_id:str)->int:
+    conn = db.connect()
+    review_table = 'Review_movie' if (type_id == 'movie') else 'Review_tv'
+    try:
+        user_id=conn.execute('SELECT MAX(Users.user_id) FROM Users WHERE name="{}";'.format(uname)).fetchall()[0][0]
+        print(user_id)
+        
+    except:
+        print("in except")
+        return 1
+    try:
+        update = 'DELETE FROM {} WHERE user_id={} AND title_id="{}" AND type_id="{}";'.format(review_table, int(user_id),title_id,type_id)
+        print(update)
+        conn.execute(update)
+    except Exception as e:
+        print(e)
+    conn.close()
+    return 0
+
 def insert_into_watched(username:str,list_of_movies:str,list_of_tv_shows:str,list_of_tv_show_impressions:str,list_of_movie_impressions:str)->int:
     print('insert_into_watched is being executed')
     print(list_of_movies,list_of_movie_impressions,list_of_tv_shows,list_of_tv_show_impressions)

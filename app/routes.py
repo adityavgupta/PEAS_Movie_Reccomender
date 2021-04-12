@@ -205,6 +205,22 @@ def updateReview():
     except Exception as e:
         return jsonify({'error':str(e)})
 
+@app.route('/deleteReview',methods=['POST'])
+def deleteReview():
+    try:
+        print(request.form)
+        user_name = request.form.getlist('user_name')[0]
+        show_name = request.form.getlist('showname')[0]
+        title_id = request.form.getlist('title_id')[0]
+        type_ = request.form.getlist('type')[0]
+        ##call helper function from database.py
+        db_helper.delete_review(user_name, show_name, title_id, type_)
+
+        return renderHome(user_name)
+
+    except Exception as e:
+        return jsonify({'error':str(e)})
+
 @app.route('/renderWatched')
 def renderWatched():
     return render_template("watched.html")
