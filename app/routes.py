@@ -120,12 +120,13 @@ def search():
         split_inputs = [x.split('=') for x in inputs]
         params = dict()
 
+        params['platform'] = ''
         for i in split_inputs:
             if i[0] in params:
                 params[i[0]] += (','+i[1])
             else:
-                params[i[0]] = i[1]
-
+                params[i[0]] = ''+i[1]
+        print(params)
         show_name = params['inputName']
         show_platform = params['platform']
         show_start_date = params['inputStartDate']
