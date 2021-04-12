@@ -155,18 +155,19 @@ def renderSearched(df, name):
 @app.route('/review',methods=['POST'])
 def review():
     try:
-        #print(request.form)
+        print(request.form)
         username = request.form.getlist('user_name')[0]
         showname = request.form.getlist('showname')[0]
         title_id = request.form.getlist('title_id')[0]
-        return renderReview(username, showname,title_id)
+        type_ = request.form.getlist('type')[0]
+        return renderReview(username, showname,title_id, type_)
 
     except Exception as e:
         return jsonify({'error':str(e)})
 
 @app.route('/renderReview')
-def renderReview(username, showname,titleid):
-    return render_template("review.html", username=username, showname=showname, titleid=titleid)
+def renderReview(username, showname,titleid, type_):
+    return render_template("review.html", username=username, showname=showname, titleid=titleid, type=type_)
     #return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)
 
 @app.route('/submitReview',methods=['POST'])
@@ -176,8 +177,11 @@ def submitReview():
         user_name = request.form.getlist('user_name')[0]
         rating = request.form.getlist('rating')[0]
         review = request.form.getlist('review')[0]
-        print(rating, review)
+        title_id = request.form.getlist('title_id')[0]
+        type_ = request.form.getlist('type')[0]
         ##call helper function from database.py
+        db_helper.insert_new_review(user_name, title_id, type_, rating, review)
+
         return renderHome(user_name)
 
     except Exception as e:

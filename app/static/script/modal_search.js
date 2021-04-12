@@ -4,6 +4,7 @@ $(function() {
         const user_name = button.data('source')
         const showname = button.data('content')
         const title_id = button.data('titleid')
+        const type = button.data('type')
         console.log(user_name,showname, title_id)
         $.ajax({
             url: '/review',
@@ -12,6 +13,7 @@ $(function() {
                 'user_name': user_name,
                 'showname': showname,
                 'title_id':title_id,
+                'type': type
             },
             dataType: 'text',
             success: function(response) {
