@@ -3,6 +3,7 @@ $(function() {
         const button = $(this)
         const user_name = button.data('source')
         const title_id = button.data('content')
+        const type = button.data('type')
         console.log(user_name)
         console.log(title_id)
         // console.log($('#inputScore').val())
@@ -12,8 +13,7 @@ $(function() {
             data: {
                 'user_name': user_name,
                 'title_id': title_id,
-                //'rating': '0',
-                // 'review': '0',
+                'type': type,
                 'rating': $('#inputScore').val(),
                 'review': $('#inputReview').val(),
             },

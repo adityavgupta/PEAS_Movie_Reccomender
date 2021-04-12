@@ -116,6 +116,26 @@ def insert_new_user(_name:str,_dob:str,_password:str)->int:
     conn.close()
     return 0
 
+def insert_new_review(uname:str,title_id:str,type_id:str,rating:str,review:str)->int:
+    conn = db.connect()
+    review_table = 'Review_movie' if (type_id == 'movie') else 'Review_tv'
+    rating = float(rating)
+    try:
+        user_id=conn.execute('SELECT MAX(Users.user_id) FROM Users WHERE name="{}";'.format(uname)).fetchall()[0][0]
+        print(user_id)
+        
+    except:
+        print("in except")
+        return 1
+    try:
+        insertion = 'INSERT INTO {} VALUES({},"{}","{}",{},"{}");'.format(review_table,int(user_id),title_id,type_id,rating,review)
+        conn.execute(insertion)
+        print(insertion)
+    except Exception as e:
+        print(e)
+    conn.close()
+    return 0
+
 def insert_into_watched(username:str,list_of_movies:str,list_of_tv_shows:str,list_of_tv_show_impressions:str,list_of_movie_impressions:str)->int:
     conn = db.connect()
     try:
