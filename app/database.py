@@ -116,6 +116,91 @@ def insert_new_user(_name:str,_dob:str,_password:str)->int:
     conn.close()
     return 0
 
+def insert_into_watched(username:str,list_of_movies:str,list_of_tv_shows:str,list_of_tv_show_impressions:str,list_of_movie_impressions:str)->int:
+    conn = db.connect()
+    try:
+        #verify if user exist
+        query_uid = 'SELECT Users.user_id FROM Users WHERE Users.name="{}";'.format(username)
+        user_id=conn.execute(query_uid).fetchall()[0][0]
+        print(user_id)
+
+        movies_list = list_of_movies.split(",")
+        tv_list = list_of_tv_shows.split(",")
+        tm_imp_list = list_of_tv_show_impressions.split(",")
+        movie_imp_list = list_of_movie_impressions.split(",")
+
+        for i in range(len(movies_list)):
+            query_mid = 'SELECT Movie.title_id FROM Movie WHERE Movie.name="{}";'.format(movies_list[i])
+            movie_id=conn.execute(query_mid).fetchall()[0][0]
+            insertion = 'INSERT INTO WATCHED_M VALUES("{}",{});'.format(movie_id, user_id)
+            #conn.execute(insertion)
+            if i < len(movie_imp_list):
+                i_insertion = 'INSERT INTO Impressions_M VALUES("{}",{},{});'.format(movie_id, user_id, movie_imp_list[i])
+                print("i_insertion", i_insertion)
+                #conn.execute(i_insertion)
+        
+        print("wanna do something col")
+        for i in range(len(tv_list)):
+            query_tid = 'SELECT TV_Show.title_id FROM TV_Show WHERE TV_Show.name="{}";'.format(tv_list[i])
+            tv_id=conn.execute(query_tid).fetchall()[0][0]
+            insertion = 'INSERT INTO WATCHED_T VALUES("{}",{});'.format(tv_id,user_id)
+            #conn.execute(insertion)
+            if i < len(tv_imp_list):
+                i_insertion = 'INSERT INTO Impressions_T VALUES("{}",{},{});'.format(tv_id, user_id, tv_imp_list[i])
+                conn.execute(i_insertion)
+
+    except:
+        #user doesn't exist
+        print("could not carry out request")
+        return 1
+
+def delete_from_watched(username:str,movie:str,tv_show:str)->int:
+    print("yooo")
+    conn = db.connect()
+    try:
+        #verify if user exist
+        query_uid = 'SELECT Users.user_id FROM Users WHERE Users.name="{}";'.format(username)
+        user_id=conn.execute(query_uid).fetchall()[0][0]
+
+        if movie != None:
+            query_mid = 'SELECT Movie.title_id FROM Movie WHERE Movie.name="{}";'.format(movie)
+            movie_id=conn.execute(query_mid).fetchall()[0][0]
+            delete_impression_m = 'DELETE FROM Impressions_M WHERE title_id LIKE "{}" AND user_id LIKE {};'.format(movie_id, user_id)
+            conn.execute(delete_impression_m)
+            delete_watched_m = 'DELETE FROM WATCHED_M WHERE title_id LIKE "{}" AND user_id LIKE {};'.format(movie_id, user_id)
+            conn.execute(delete_impression_m)
+
+        if tv_show != None:
+            query_tid = 'SELECT TV_Show.title_id FROM TV_Show WHERE TV_Show.name="{}";'.format(tv_show)
+            tv_id=conn.execute(query_tid).fetchall()[0][0]
+            delete_impression_t = 'DELETE FROM Impressions_T WHERE title_id LIKE "{}" AND user_id LIKE {};'.format(tv_id, user_id)
+            conn.execute(delete_impression_t)
+            delete_watched_t = 'DELETE FROM WATCHED_T WHERE title_id LIKE "{}" AND user_id LIKE {};'.format(tv_id, user_id)
+            conn.execute(delete_impression_t)
+
+    except:
+        #user doesn't exist
+        print("could not carry out request")
+        return 1
+
+def emma_advanced_query():
+    result = None
+    conn = db.connect()
+    try:
+        query = 'select movie.title_id, AVG(Review_movie.score) as avg_score \
+        from movie natural join Review_movie \
+        group by movie.title_id \
+        union \
+        select tv_show.title_id, AVG(Review_tv.score) as avg_score \
+        from tv_show natural join Review_tv \
+        group by tv_show.title_id;'
+        #print(query)
+        result = conn.execute(query).fetchall()
+        #print(result)
+    except Exception as e:
+        print(e)
+    return result
+
 def verify_user_info(_name:str,_password:str)->int:
     """Insert new task to todo table.
 
