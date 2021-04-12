@@ -37,4 +37,23 @@ $(function() {
             }
         });
     });
+
+    $('#btnRenderReviewPage').click(function() {
+        $.ajax({
+            url: '/renderSearchReview',
+            type: 'POST',
+            dataType: 'text',
+            data: {"name":$('#home_name').html()},
+            success: function(response) {
+                console.log(response);
+                document.open();
+                document.write(`${response}`);
+                document.close();
+                
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
 });

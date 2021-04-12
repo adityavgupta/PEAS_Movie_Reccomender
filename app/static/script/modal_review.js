@@ -4,11 +4,20 @@ $(function() {
         const user_name = button.data('source')
         const title_id = button.data('content')
         const type = button.data('type')
+        const update_type = button.data('updatetype')
+        var url_ = "";
+        if (update_type === "Create") {
+            url_ = '/submitReview';
+        } else if (update_type === "Update"){
+            url_ = '/updateReview';
+        } else {
+            url_ = ""
+        }
         console.log(user_name)
         console.log(title_id)
         // console.log($('#inputScore').val())
         $.ajax({
-            url: '/submitReview',
+            url: url_,
             type: 'POST',
             data: {
                 'user_name': user_name,

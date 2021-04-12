@@ -160,14 +160,15 @@ def review():
         showname = request.form.getlist('showname')[0]
         title_id = request.form.getlist('title_id')[0]
         type_ = request.form.getlist('type')[0]
-        return renderReview(username, showname,title_id, type_)
+        update_type = request.form.getlist('update_type')[0]
+        return renderReview(username, showname,title_id, type_, update_type)
 
     except Exception as e:
         return jsonify({'error':str(e)})
 
 @app.route('/renderReview')
-def renderReview(username, showname,titleid, type_):
-    return render_template("review.html", username=username, showname=showname, titleid=titleid, type=type_)
+def renderReview(username, showname,titleid, type_, update_type):
+    return render_template("review.html", username=username, showname=showname, titleid=titleid, type=type_, update_type=update_type)
     #return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)
 
 @app.route('/submitReview',methods=['POST'])
@@ -181,6 +182,23 @@ def submitReview():
         type_ = request.form.getlist('type')[0]
         ##call helper function from database.py
         db_helper.insert_new_review(user_name, title_id, type_, rating, review)
+
+        return renderHome(user_name)
+
+    except Exception as e:
+        return jsonify({'error':str(e)})
+
+@app.route('/updateReview',methods=['POST'])
+def updateReview():
+    try:
+        print(request.form)
+        user_name = request.form.getlist('user_name')[0]
+        rating = request.form.getlist('rating')[0]
+        review = request.form.getlist('review')[0]
+        title_id = request.form.getlist('title_id')[0]
+        type_ = request.form.getlist('type')[0]
+        ##call helper function from database.py
+        db_helper.update_review(user_name, title_id, type_, rating, review)
 
         return renderHome(user_name)
 
@@ -264,4 +282,50 @@ def paulQuery():
 @app.route('/renderPaulQuery')
 def renderPaulQuery(result):
     return render_template('Paul.html',items=result)
+
+@app.route('/renderSearchReview',methods=['POST'])
+def renderSearchReview():
+    print(request.form)
+    username = request.form.getlist('name')[0]
+    return render_template('review_search.html', name=username)
+
+@app.route('/searchReview',methods=['POST'])
+def searchReview():
+    try:
+        # name = request.form[0][1]
+        print(request.form)
+        inputs = request.form.getlist('form')[0].split('&')
+        split_inputs = [x.split('=') for x in inputs]
+        params = dict()
+
+        params['platform'] = ''
+        for i in split_inputs:
+            if i[0] in params:
+                params[i[0]] += (i[1]+" ")
+            else:
+                params[i[0]] = i[1]
+        show_platform = params['platform']
+        show_name = params['inputName']
+        name = request.form.getlist('name')[0]
+        # print(params)
+        # print(name, show_platform)
+
+        # validate the received values
+        if name or show_platform:
+            result = db_helper.lookup_reviews(name, show_platform, show_name)
+            if result:
+                keys=('Title','Title_id', 'Type','Score','Review', 'AverageRating')
+                df = [dict(zip(keys, values)) for values in result]
+                #print(df)
+                return renderSearchedReview(df,name)
+            
+        else:
+            return jsonify({'html':'<span>Enter the required fields</span>'})
+
+    except Exception as e:
+        return jsonify({'error':str(e)})
+
+@app.route('/renderSearchedReview')
+def renderSearchedReview(df, name):
+    return render_template("review_search.html", name=name, items=df)
 

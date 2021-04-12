@@ -136,6 +136,26 @@ def insert_new_review(uname:str,title_id:str,type_id:str,rating:str,review:str)-
     conn.close()
     return 0
 
+def update_review(uname:str,title_id:str,type_id:str,rating:str,review:str)->int:
+    conn = db.connect()
+    review_table = 'Review_movie' if (type_id == 'movie') else 'Review_tv'
+    rating = float(rating)
+    try:
+        user_id=conn.execute('SELECT MAX(Users.user_id) FROM Users WHERE name="{}";'.format(uname)).fetchall()[0][0]
+        print(user_id)
+        
+    except:
+        print("in except")
+        return 1
+    try:
+        update = 'UPDATE {} SET score={},comments="{}" WHERE user_id={} AND title_id="{}" AND type_id="{}";'.format(review_table,rating,review,int(user_id),title_id,type_id)
+        conn.execute(update)
+        print(update)
+    except Exception as e:
+        print(e)
+    conn.close()
+    return 0
+
 def insert_into_watched(username:str,list_of_movies:str,list_of_tv_shows:str,list_of_tv_show_impressions:str,list_of_movie_impressions:str)->int:
     conn = db.connect()
     try:
@@ -305,3 +325,61 @@ def paulQuery():
     conn.close()
     return result
 
+
+def lookup_reviews(name:str, platforms:str, show_name:str):
+    """
+    Select * from
+    (select m.name as title, rm.type_id as type, rm.score as rating, rm.comments as review, m.avg_rating as avg_sc
+    from Review_movie rm join movie m on rm.title_id = m.title_id 
+    where rm.user_id = {}
+    union
+    select t.name, rt.type_id, rt.score, rt.comments, t.avg_rating
+    from Review_tv rt join tv_show t on rt.title_id = t.title_id 
+    where rt.user_id = {}
+    ) as a
+    order by a.rating
+    """
+
+    result = None
+    conn = db.connect()
+    platforms = platforms.split(" ")
+    contains_movie = "movie" in platforms
+    contains_tv = "tv" in platforms
+    # show_name = "%%" + show_name + "%%"
+    print(show_name)
+    try:
+        user_id=conn.execute('SELECT MAX(Users.user_id) FROM Users WHERE name="{}";'.format(name)).fetchall()[0][0]
+        print(user_id, contains_movie, contains_tv)
+        
+    except:
+        print("in except")
+        return 1
+
+    
+    #print(platform_where)
+    try:
+        if (contains_movie and contains_tv) or (not contains_movie and not contains_tv):
+            query= 'Select * from\
+                    (select m.name as title, rm.title_id as tid, rm.type_id as type, rm.score as rating, rm.comments as review, m.avg_rating as avg_sc\
+                    from Review_movie rm join movie m on rm.title_id = m.title_id \
+                    where rm.user_id = {} and m.name like "%%{}%%"\
+                    union\
+                    select t.name, rt.title_id, rt.type_id, rt.score, rt.comments, t.avg_rating\
+                    from Review_tv rt join tv_show t on rt.title_id = t.title_id \
+                    where rt.user_id = {} and t.name like "%%{}%%"\
+                    ) as a\
+                    order by a.rating'.format(user_id, show_name, user_id, show_name)
+        elif contains_movie:
+            query= 'select m.name as title, rm.title_id as tid, rm.type_id as type, rm.score as rating, rm.comments as review, m.avg_rating as avg_sc\
+                    from Review_movie rm join movie m on rm.title_id = m.title_id \
+                    where rm.user_id = {} and m.name like "%%{}%%"'.format(user_id, show_name)
+        else:
+            query= 'select m.name as title, rm.title_id as tid, rm.type_id as type, rm.score as rating, rm.comments as review, m.avg_rating as avg_sc\
+                    from Review_tv rm join tv_show m on rm.title_id = m.title_id \
+                    where rm.user_id = {} and m.name like "%%{}%%"'.format(user_id, show_name)
+        print(query)
+        result = conn.execute(query).fetchall()
+       
+    except Exception as e:
+        print(e)
+    return result

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Movie Recommender</title>
+    <!-- <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet"> -->
+    <link href="../static/styles/signup.css" rel="stylesheet">
+    <script src="../static/script/jquery-1.11.2.js"></script>
+    <script src="../static/script/modal_review_search.js"></script>
+    <script src="../static/script/modal_home.js"></script>
+
+  </head>
+  <body>
+ 
+    <div class="container">
+      <div class="header">
+        <nav>
+            <div class="topnav">
+                <p>Welcome, </p>
+                <p name='home_name' id ='home_name'>{{name}}</p>
+                <p>Look up a movie or TV Show review you made.</p>
+                <form class="form-signin">
+                <input type="name" name="inputName" id="inputName" class="form-control" placeholder="Name" required autofocus>
+                <fieldset>
+                    <legend>Filter by Platform</legend>
+                      <div>
+                        <input type="checkbox" id="movie" name="platform" value="movie">
+                        <label for="movie">Movie</label>
+                      </div>
+                      <div>
+                        <input type="checkbox" id="tv" name="platform" value="tv">
+                        <label for="tv">TV Show</label>
+                      </div>
+                  </fieldset>
+                <button id="btnReviewSearch" class="btn btn-lg btn-primary btn-block" data-uname="{{name}}" type="button">Search Reviews</button>
+
+                </form>
+
+                <div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th class="Title">Title</th>
+                            <th class="Type">Type</th>
+                            <th class="Score">Score</th>
+                            <th class="Review">Review</th>
+                            <th class="update"></th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>{{item.Title}}</td>
+                                <td>{{item.Type}}</td>
+                                <td>{{item.Score}}</td>
+                                <td>{{item.Review}}</td>
+                                <td><button type="button" class="btnUpdateReview" data-source="{{name}}" data-titleid="{{item.Title_id}}" data-type="{{item.Type}}" data-content="{{item.Title}}">Update Review</button></td>
+                            </tr>
+                        {% endfor %}
+                        
+                        </tbody>
+                    </table>
+              </div>
+        </nav>
+      </div>
+ 
+    </div>
+  </body>
+</html>

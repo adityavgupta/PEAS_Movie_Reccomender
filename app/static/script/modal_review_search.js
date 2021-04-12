@@ -1,5 +1,25 @@
 $(function() {
-    $('.btnReview').click(function() {
+    $('#btnReviewSearch').click(function() {
+        const button = $(this)
+        const user_name = button.data('uname')
+        $.ajax({
+            url: '/searchReview',
+            data: {"name":user_name, "form":$('form').serialize()},
+            type: 'POST',
+            dataType: 'text',
+            success: function(response) {
+                console.log(response);
+                document.open();
+                document.write(`${response}`);
+                document.close();
+                
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+    $('.btnUpdateReview').click(function() {
         const button = $(this)
         const user_name = button.data('source')
         const showname = button.data('content')
@@ -14,7 +34,7 @@ $(function() {
                 'showname': showname,
                 'title_id':title_id,
                 'type': type,
-                'update_type': 'Create'
+                'update_type': 'Update'
             },
             dataType: 'text',
             success: function(response) {
@@ -28,10 +48,3 @@ $(function() {
         });
     });
 });
-
-function dres(x) {
-    // console.log('dres');
-    document.open();
-    document.write(`${x}`);
-    document.close();
-}
