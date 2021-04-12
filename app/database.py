@@ -116,6 +116,22 @@ def insert_new_user(_name:str,_dob:str,_password:str)->int:
     conn.close()
     return 0
 
+def delete_user(uname:str):
+    conn=db.connect()
+    try:
+        user_id=conn.execute('SELECT MAX(Users.user_id) FROM Users WHERE name="{}";'.format(uname)).fetchall()[0][0]
+        
+    except:
+        print("in except")
+        return 1
+    try:
+        update = 'DELETE FROM Users WHERE user_id={};'.format(int(user_id))
+        conn.execute(update)
+    except Exception as e:
+        print(e)
+    conn.close()
+    return 0
+
 def insert_new_review(uname:str,title_id:str,type_id:str,rating:str,review:str)->int:
     conn = db.connect()
     review_table = 'Review_movie' if (type_id == 'movie') else 'Review_tv'
@@ -283,6 +299,7 @@ def update_watched(username:str,list_of_movies:str,list_of_tv_shows:str,list_of_
         conn.close()
         print(e)
         return 1
+
 def lookup_watched(username:str,list_of_movies:str,list_of_tv_shows:str):
     conn = db.connect()
     results = []
@@ -438,10 +455,15 @@ def lookup(name:str, platform:str, date:str):
 def paulQuery():
     conn = db.connect()
     try:
-        query = 'select movie.release_year, AVG(movie.avg_rating) as avg_ratings, "Movie" as type from movie group by movie.release_year union select tv_show.start_year, AVG(tv_show.avg_rating) as avg_ratings, "TV" as type from tv_show group by tv_show.start_year'
-        print(query)
+        query = 'SELECT * from ((select movie.release_year as ry, AVG(movie.avg_rating) as ar , "Movie" as type\
+                from movie group by movie.release_year)\
+                  union \
+                (select tv_show.start_year, AVG(tv_show.avg_rating) as avg_ratings, "TV" as type\
+                from tv_show group by tv_show.start_year)) as a\
+                    order by a.ar desc;'
+        #print(query)
         result = conn.execute(query).fetchall()
-        print(result)
+        #print(result)
         return result
     except Exception as e:
         print(e)

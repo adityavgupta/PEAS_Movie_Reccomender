@@ -7,7 +7,6 @@
     <link href="../static/styles/signup.css" rel="stylesheet">
     <script src="../static/script/jquery-1.11.2.js"></script>
     <script src="../static/script/modal_home.js"></script>
-
   </head>
   <body>
  
@@ -22,7 +21,8 @@
                 <li role="presentation" class="active"><a href="./renderWatched_delete">delete from watched</a></li>
                 <li role="presentation" class="active"><a href="./renderEmma">run emma's query</a></li>
                 <button id="btnRenderReviewPage" class="btn btn-lg btn-primary btn-block" type="button">Look at reviews</button><br>
-                <button id="btnPaulQuery" class="btn btn-lg btn-primary btn-block" type="button">Check out which year has the bet movie!</button>
+                <button id="btnPaulQuery" class="btn btn-lg btn-primary btn-block" type="button" data-source="{{name}}">Check out which year has the best movie!</button><br>
+                <button id="btnDeleteUser" class="btn btn-lg btn-primary btn-block" type="button">Delete User</button> 
                 <form class="form-signin">
                 <input type="name" name="inputName" id="inputName" class="form-control" placeholder="Name" required autofocus>
 

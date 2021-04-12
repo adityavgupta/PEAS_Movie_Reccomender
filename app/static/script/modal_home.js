@@ -56,4 +56,27 @@ $(function() {
             }
         });
     });
+
+    $('#btnDeleteUser').click(function(){
+        const button = $(this)
+        const user_name = button.data('source')
+        
+        console.log(user_name)
+        $.ajax({
+            url: '/deleteUser',
+            type: 'POST',
+            dataType: 'text',
+            data: {"name":$('#home_name').html()},
+            success: function(response) {
+                console.log(response);
+                document.open();
+                document.write(`${response}`);
+                document.close();
+                
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
 });

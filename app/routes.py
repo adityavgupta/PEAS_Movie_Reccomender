@@ -74,7 +74,6 @@ def signUp():
 
         # validate the received values
         if _name and _dob and _password:
-            
             data = request.get_json()
             db_helper.insert_new_user(_name,_dob,_password)
             result = {'success': True, 'response': 'Done'}
@@ -84,6 +83,20 @@ def signUp():
 
     except Exception as e:
         return jsonify({'error':str(e)})
+
+@app.route('/deleteUser', methods=['POST'])
+def deleteUser():
+    try:
+        print(request.form.getlist('name')[0])
+        #print(request.form.getlist('user_name')[0])
+        username = request.form.getlist('name')[0]
+        db_helper.delete_user(username)
+        return homepage()
+
+    except:
+        print("ooooo")
+
+
 
 @app.route('/signIn',methods=['POST'])
 def signIn():
@@ -113,8 +126,8 @@ def renderHome(name):
 @app.route('/search',methods=['POST'])
 def search():
     try:
-        print(request.form)
-        print(request.form.getlist('name'))
+        #print(request.form)
+        #print(request.form.getlist('name'))
         #name = request.form[0][1]
         inputs = request.form.getlist('form')[0].split('&')
         split_inputs = [x.split('=') for x in inputs]
