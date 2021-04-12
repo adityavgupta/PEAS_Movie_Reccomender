@@ -265,27 +265,15 @@ def lookup(name:str, platform:str, date:str):
         movie_where += ' AND (m.name LIKE "%%{}%%")'.format(name)
         tv_where += ' AND (t.name LIKE "%%{}%%")'.format(name)
 
-    platform_where = 'WHERE (platform LIKE'
-    for i in range(len(platforms)):
+    platform_where = ''
+    for i in range(1,len(platforms)):
         strn = platforms[i]
-        if i == 0:
-            platform_where += ' "%%'+strn+'%%" '
+        if i == 1:
+            platform_where += 'WHERE platform LIKE "%%'+strn+'%%" '
         else:
             platform_where += 'or platform LIKE "%%'+strn+'%%" '
-    platform_where += ') '
-
     
-    #print(platform_where)
     try:
-        # query = '(SELECT m.name, "Movie" as type from movie m where m.name LIKE "%%{}%%" ORDER BY m.popularity LIMIT 10)\
-        #          UNION \
-        #         (SELECT t.name, "TV Show" as type from tv_show t where t.name LIKE "%%{}%%" ORDER BY t.popularity LIMIT 10)'.format(name, name)
-        # print(query)
-        # query = 'SELECT title_name, type_mt, pop, ar, platform\
-        #     FROM ((SELECT m.name as title_name, m.type_id as type_mt, m.popularity as pop, avg_rating as ar, available_on as platform\
-        #          FROM movie m '+movie_where+' ORDER BY m.popularity DESC LIMIT 500) UNION\
-        #             (SELECT t.name, t.type_id, t.popularity, avg_rating, available_on FROM tv_show t'+tv_where+' ORDER BY t.popularity DESC LIMIT 500)) AS topmt\
-        #             '+platform_where+' ORDER BY ar DESC;'.format(date,name,date,name)
         query = 'SELECT title_name, type_mt, mtitle_id, pop, ar, platform\
             FROM(\
             (SELECT m.name as title_name, m.type_id as type_mt, m.title_id as mtitle_id, m.popularity as pop, avg_rating as ar, available_on as platform FROM movie m '+movie_where+' ORDER BY m.popularity DESC LIMIT 20)\
@@ -296,4 +284,5 @@ def lookup(name:str, platform:str, date:str):
        
     except Exception as e:
         print(e)
+    
     return result
