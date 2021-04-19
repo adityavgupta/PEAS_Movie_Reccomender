@@ -1,5 +1,5 @@
 """ Specifies routing for the application"""
-from flask import render_template, request, jsonify, Flask
+from flask import render_template, request, jsonify, Flask, redirect, url_for
 from app import app
 from app import database as db_helper
 import pandas as pd
@@ -66,7 +66,9 @@ def signIn():
         if _name and _password:
             data = request.get_json()
             if db_helper.verify_user_info(_name,_password) == 0:
-                return renderHome(_name)
+                response = redirect(url_for("renderHome"))
+                response.set_cookie('UsernameCookie', _name)
+                return response
     
             result = {'success': False, 'response': 'Done'}
             return jsonify(result)
@@ -76,9 +78,18 @@ def signIn():
     except Exception as e:
         return jsonify({'error':str(e)})
 
+@app.route('/signOut',methods=['POST'])
+def signOut():
+    response = redirect(url_for(".homepage"))
+    response.set_cookie('UsernameCookie', '', expires=0)
+    print(response)
+    return response
+
 @app.route('/renderHome')
-def renderHome(name):
-    return render_template("home.html", name=name)
+def renderHome():
+    user_name = request.cookies.get('UsernameCookie')
+    # print(user_name)
+    return render_template("home.html", name=user_name)
 
 @app.route('/search',methods=['POST'])
 def search():

@@ -19,6 +19,25 @@ $(function() {
         });
     });
 
+    $('#btnSignOut').click(function() {
+        console.log('smthing')
+        $.ajax({
+            url: '/signOut',
+            type: 'POST',
+            dataType: 'text',
+            success: function(response) {
+                console.log(response);
+                document.open();
+                document.write(`${response}`);
+                document.close();
+                
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+
     $('#btnPaulQuery').click(function() {
         // console.log('smthing')
         $.ajax({

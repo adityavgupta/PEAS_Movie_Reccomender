@@ -244,12 +244,6 @@ def insert_into_watched(username:str,list_of_movies:str,list_of_tv_shows:str,lis
     conn.close()
     return 1
 
-    # except Exception as e:
-    #     try:
-    #         update_watched(username,list_of_movies,list_of_tv_shows,list_of_tv_show_impressions,list_of_movie_impressions)
-    #     except Exception as o:
-    #         print('secondary update '+o)
-
 
 def update_watched(username:str,list_of_movies:str,list_of_tv_shows:str,list_of_tv_show_impressions:str,list_of_movie_impressions:str)->int:
     print('update_watched is being executed')
