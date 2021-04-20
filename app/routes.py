@@ -10,14 +10,16 @@ def homepage():
     """ returns rendered homepage """
     # items = db_helper.fetch_todo()
     ##print('lelelel')
+    if request.cookies.get('UsernameCookie'):
+        return renderHome()
     return render_template("index.html")
 
-@app.route('/renderSignUp')
+@app.route('/renderSignUp',methods=['POST'])
 def renderSignUp():
     ##print('lelelele')
     return render_template("signup.html")
 
-@app.route('/renderSignIn')
+@app.route('/renderSignIn',methods=['POST'])
 def renderSignIn():
     return render_template("signin.html")
 
@@ -64,7 +66,7 @@ def signIn():
         if _name and _password:
             data = request.get_json()
             if db_helper.verify_user_info(_name,_password) == 0:
-                response = redirect(url_for("renderHome"))
+                response = redirect(url_for(".renderHome"))
                 response.set_cookie('UsernameCookie', _name)
                 return response
     
@@ -118,7 +120,7 @@ def search():
                 keys=('Name','Type','Title_id','Popularity', 'AverageRating','Platform')
                 df = [dict(zip(keys, values)) for values in result]
                 #print(df)
-                return renderSearched(df,name)
+                return renderSearched(df)
             
         else:
             return jsonify({'html':'<span>Enter the required fields</span>'})
@@ -127,13 +129,14 @@ def search():
         return jsonify({'error':str(e)})
 
 @app.route('/renderSearched')
-def renderSearched(df, name):
-    return render_template("searched.html", name=name, items=df)
+def renderSearched(df):
+    user_name = request.cookies.get('UsernameCookie')
+    return render_template("searched.html", name=user_name, items=df)
     #return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)
 
 @app.route('/leaveImpression')
 def updateImpression():
-    
+    pass
 
 
 @app.route('/review',methods=['POST'])
@@ -145,13 +148,14 @@ def review():
         title_id = request.form.getlist('title_id')[0]
         type_ = request.form.getlist('type')[0]
         update_type = request.form.getlist('update_type')[0]
-        return renderReview(username, showname,title_id, type_, update_type)
+        return renderReview(showname,title_id, type_, update_type)
 
     except Exception as e:
         return jsonify({'error':str(e)})
 
 @app.route('/renderReview')
-def renderReview(username, showname,titleid, type_, update_type):
+def renderReview(showname,titleid, type_, update_type):
+    user_name = request.cookies.get('UsernameCookie')
     return render_template("review.html", username=username, showname=showname, titleid=titleid, type=type_, update_type=update_type)
     #return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)
 
@@ -167,7 +171,7 @@ def submitReview():
         ##call helper function from database.py
         db_helper.insert_new_review(user_name, title_id, type_, rating, review)
 
-        return renderHome(user_name)
+        return renderHome()
 
     except Exception as e:
         return jsonify({'error':str(e)})
@@ -184,7 +188,7 @@ def updateReview():
         ##call helper function from database.py
         db_helper.update_review(user_name, title_id, type_, rating, review)
 
-        return renderHome(user_name)
+        return renderHome()
 
     except Exception as e:
         return jsonify({'error':str(e)})
@@ -200,7 +204,7 @@ def deleteReview():
         ##call helper function from database.py
         db_helper.delete_review(user_name, show_name, title_id, type_)
 
-        return renderHome(user_name)
+        return renderHome()
 
     except Exception as e:
         return jsonify({'error':str(e)})
@@ -374,5 +378,5 @@ def renderSearchedReview(df, name):
 @app.route('/goHome',methods=['POST'])
 def goHome():
     username = request.form.getlist('name')[0]
-    return renderHome(username)
+    return renderHome()
 
