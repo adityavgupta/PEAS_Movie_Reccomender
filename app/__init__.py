@@ -43,6 +43,7 @@ def init_connection_engine():
 
 
 app = Flask(__name__)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 db = init_connection_engine()
 
 # conn = db.connect()

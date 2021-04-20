@@ -5,6 +5,7 @@
     <!-- <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet"> -->
     <link href="../static/styles/signup.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="../static/script/jquery-1.11.2.js"></script>
     <script src="../static/script/modal_search.js"></script>
     <script src="../static/script/modal_home.js"></script>
@@ -49,7 +50,7 @@
                   <label for="inputStartDate" class="sr-only">Release Year or Start Date</label>
                   <input type="startDate" name="inputStartDate" id="inputStartDate" class="form-control form-control-sm" placeholder="YYYY-MM-DD">
                 </div>
-                <button id="btnSearch" class="btn btn-lg btn-primary btn-block" type="button">Search</button>
+                <button id="btnSearch" class="btn btn-lg btn-primary btn-block" type="button"><i class="fa fa-search"></i>Search</button>
 
                 </form>
 
@@ -74,7 +75,10 @@
                                 <td>{{item.Popularity}}</td>
                                 <td>{{item.AverageRating}}</td>
                                 <td>{{item.Platform}}</td>
-                                <td><button type="button" class="btnReview" data-source="{{name}}" data-titleid="{{item.Title_id}}" data-type="{{item.Type}}" data-content="{{item.Name}}">Review</button></td>
+                                <td><button type="button" class="btn btnReview" data-source="{{name}}" data-titleid="{{item.Title_id}}" data-type="{{item.Type}}" data-content="{{item.Name}}">Review</button></td>
+                                <td><button type="button" class="btn btnImpression" data-source="{{name}}" data-titleid="{{item.Title_id}}" data-type="{{item.Type}}" data-content="{{item.Name}}" data-impression="Like"><i class="fa fa-thumbs-up"></i>Like</button></td>
+                                <td><button type="button" class="btn btnImpression" data-source="{{name}}" data-titleid="{{item.Title_id}}" data-type="{{item.Type}}" data-content="{{item.Name}}" data-impression="Meh"><i class="fa fa-meh"></i>Meh</button></td>
+                                <td><button type="button" class="btn btnImpression" data-source="{{name}}" data-titleid="{{item.Title_id}}" data-type="{{item.Type}}" data-content="{{item.Name}}" data-impression="Dislike"><i class="fa fa-thumbs-down"></i>Dislike</button></td>
                             </tr>
                         {% endfor %}
                         

@@ -53,8 +53,6 @@ def deleteUser():
     except:
         print("ooooo")
 
-
-
 @app.route('/signIn',methods=['POST'])
 def signIn():
     try:
@@ -132,6 +130,11 @@ def search():
 def renderSearched(df, name):
     return render_template("searched.html", name=name, items=df)
     #return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)
+
+@app.route('/leaveImpression')
+def updateImpression():
+    
+
 
 @app.route('/review',methods=['POST'])
 def review():

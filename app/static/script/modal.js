@@ -17,6 +17,7 @@ $(function() {
 
 $(function() {
     $('#goSignIn').click(function() {
+        console.log('your message');
         $.ajax({
             url: '/renderSignIn',
             // data: $('form').serialize(),
