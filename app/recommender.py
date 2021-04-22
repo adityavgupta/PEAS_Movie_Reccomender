@@ -7,6 +7,7 @@ from app import db
 conn = db.connect()
 
 def get_all_movies():
+    # need to change limit
     movies_query = 'SELECT name, genres FROM Movie LIMIT 15;'
     movies = conn.execute(movies_query).fetchall()
     return movies
@@ -26,7 +27,7 @@ def get_index_from_title(df, name):
 def combined_features(row):
     return row['name']+" "+row['genres']
 
-#defining 
+# add more features??
 def get_recommendation(user_id):
     movies = get_all_movies()
     df = create_df(movies)
@@ -43,11 +44,9 @@ def get_recommendation(user_id):
         sorted_similar_movies = sorted(similar_movies, key=lambda x:x[1], reverse=True)
         for i in range(5):
             sim_movie = df.iloc[sorted_similar_movies[i][0], 0]
-            print(sim_movie)
             if sim_movie in movies_dict:
                 movies_dict[sim_movie] += 1
             else:
                 movies_dict[sim_movie] = 1
 
-    print(movies_dict)
     return sorted(movies_dict, key=movies_dict.get, reverse=True)[:3]
