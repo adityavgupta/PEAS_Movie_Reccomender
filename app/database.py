@@ -111,6 +111,7 @@ def insert_new_user(_name:str,_dob:str,_password:str)->int:
         insertion = 'INSERT INTO Users VALUES({},"{}",CAST("{}" as DATE),"{}","{}");'.format(user_id,_name,_dob,streaming_platforms,_password)
         conn.execute(insertion)
         print(insertion, file=sys.stderr)
+        return user_id
     except Exception as e:
         print(e)
     conn.close()
@@ -522,3 +523,17 @@ def lookup_reviews(name:str, platforms:str, show_name:str):
     except Exception as e:
         print(e)
     return result
+
+
+def getName(uid):
+    conn = db.connect()
+    query = "select name from users where user_id = '{}'".format(str(uid))
+    user_name = conn.execute(query).fetchall()[0][0]
+    return user_name
+
+
+def getId(username, pswd):
+    conn = db.connect()
+    query = "select user_id from users where name = '{}' and passwd = '{}'".format(str(username),str(pswd))
+    uid = conn.execute(query).fetchall()[0][0]
+    return uid

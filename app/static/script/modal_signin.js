@@ -6,8 +6,9 @@ $(function() {
             type: 'POST',
             dataType: 'text',
             success: function(response) {
-                console.log(response);
-                dres(response);
+                document.open();
+                document.write(`${response}`);
+                document.close();
                 
             },
             error: function(error) {
@@ -16,10 +17,3 @@ $(function() {
         });
     });
 });
-
-function dres(x) {
-    console.log('dres');
-    document.open();
-    document.write(`${x}`);
-    document.close();
-}
