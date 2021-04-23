@@ -87,7 +87,7 @@ def signOut():
     print(response)
     return response
 
-@app.route('/renderHome')
+@app.route('/renderHome',methods=['POST'])
 def renderHome():
     user_name = db_helper.getName(request.cookies.get('UserIdCookie'))
     # print(user_name)
@@ -136,9 +136,24 @@ def renderSearched(df):
     return render_template("searched.html", name=user_name, items=df)
     #return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)
 
-@app.route('/leaveImpression')
+@app.route('/leaveImpression',methods=['POST'])
 def updateImpression():
-    pass
+    username = request.form.getlist('user_name')[0]
+    showname = request.form.getlist('showname')[0]
+    title_id = request.form.getlist('title_id')[0]
+    type_ = request.form.getlist('type')[0]
+    impression = request.form.getlist('impression')[0]
+    imp_d = {'Dislike':0,'Like':1}
+    print(title_id)
+    try:
+        if type_ == 'tvSeries':
+            db_helper.insert_into_watched(username,'','{}'.format(showname),'{}'.format(str(imp_d[impression])),'')
+        else:
+            db_helper.insert_into_watched(username,'{}'.format(showname),'','','{}'.format(str(imp_d[impression])))
+        result = {'success': True, 'response': 'Done'}
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error':str(e)})
 
 
 @app.route('/review',methods=['POST'])

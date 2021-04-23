@@ -75,26 +75,5 @@ $(function() {
                 console.log(error);
             }
         });
-    });
-
-    $('#btnGoHome').click(function() {
-        const button = $(this)
-        const user_name = button.data('source')
-        $.ajax({
-            url: '/goHome',
-            data: {"name":user_name},
-            type: 'POST',
-            dataType: 'text',
-            success: function(response) {
-                console.log(response);
-                document.open();
-                document.write(`${response}`);
-                document.close();
-                
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
-    });
+    })
 });

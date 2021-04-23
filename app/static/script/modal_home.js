@@ -98,4 +98,40 @@ $(function() {
             }
         });
     });
+
+    $('#btnGallery').click(function(){
+        console.log(user_name)
+        $.ajax({
+            url: '/getGallery',
+            type: 'POST',
+            success: function(response) {
+                console.log(response);
+                document.open();
+                document.write(`${response}`);
+                document.close();
+                
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+
+    $('#btnGoHome').click(function() {
+        $.ajax({
+            url: '/renderHome',
+            type: 'POST',
+            dataType: 'text',
+            success: function(response) {
+                console.log(response);
+                document.open();
+                document.write(`${response}`);
+                document.close();
+                
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
 });

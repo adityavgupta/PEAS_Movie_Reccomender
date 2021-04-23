@@ -20,11 +20,16 @@
                 <p>Welcome, </p>
                 <p name='home_name' id ='home_name'>{{name}}</p>
                 <p>Look up a movie or TVshow</p>
-                <li role="presentation" class="active"><a href="./renderWatched">What have you watched?</a></li>
-                <li role="presentation" class="active"><a href="./renderWatched_delete">delete from watched</a></li>
-                <li role="presentation" class="active"><a href="./renderEmma">check out tv show and movie average ratings here</a></li>
+                <!-- <li role="presentation" class="active"><a href="./renderWatched">What have you watched?</a></li> -->
+                <!-- <li role="presentation" class="active"><a href="./renderWatched_delete">delete from watched</a></li> -->
+                <button type="button" id="btnGoHome" data-source="{{name}}">Return Home</button>
+                <li role="presentation" class="active"><a href="./renderEmma">check out tv show and movie average ratings here</a></li><br>
+                <button id="btnPaulQuery" class="btn btn-lg btn-primary btn-block" type="button">Check out which year has the bet movie!</button><br>
                 <button id="btnRenderReviewPage" class="btn btn-lg btn-primary btn-block" type="button">Look at reviews</button><br>
-                <button id="btnPaulQuery" class="btn btn-lg btn-primary btn-block" type="button">Check out which year has the bet movie!</button>
+                <button id="btnGallery" class="btn btn-lg btn-primary btn-block" type="button">Your personal gallery</button><br>
+                <button id="btnSignOut" class="btn btn-lg btn-primary btn-block" type="button">Sign out</button><br>
+                <button id="btnDeleteUser" class="btn btn-lg btn-primary btn-block" type="button">Delete User</button> <br>
+                
                 <form class="form-signin">
                 <input type="name" name="inputName" id="inputName" class="form-control" placeholder="Name" required autofocus>
                 <fieldset>
