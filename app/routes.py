@@ -68,7 +68,7 @@ def signIn():
             data = request.get_json()
             if db_helper.verify_user_info(_name,_password) == 0:
                 uid = db_helper.getId(_name, _password)
-                response = redirect(url_for("renderHome", variable='home'))
+                response = redirect(url_for("renderHome"))
                 response.set_cookie('UserIdCookie',str(uid))
                 return response
     
@@ -91,7 +91,7 @@ def signOut():
 def renderHome():
     user_name = db_helper.getName(request.cookies.get('UserIdCookie'))
     # print(user_name)
-    return render_template("home.html", keys='home',name=user_name)
+    return render_template("home.html",name=user_name)
 
 @app.route('/search',methods=['POST'])
 def search():
