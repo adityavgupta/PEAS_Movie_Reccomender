@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Movie Recommender</title>
+    <!-- <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet"> -->
+    <link href="../static/styles/signup.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="../static/script/jquery-1.11.2.js"></script>
+    <script src="../static/script/modal_search.js"></script>
+    <script src="../static/script/modal_home.js"></script>
+
+  </head>
+  <body>
+ 
+    <div class="container">
+      <div class="header">
+        <nav>
+            <div class="topnav">
+                <p>Welcome, </p>
+                <p name='home_name' id ='home_name'>{{name}}</p>
+                <p>Look up a movie or TVshow</p>
+                <!-- <li role="presentation" class="active"><a href="./renderWatched">What have you watched?</a></li> -->
+                <!-- <li role="presentation" class="active"><a href="./renderWatched_delete">delete from watched</a></li> -->
+                <button type="button" id="btnGoHome" data-source="{{name}}">Return Home</button>
+                <li role="presentation" class="active"><a href="./renderEmma">check out tv show and movie average ratings here</a></li><br>
+                <button id="btnPaulQuery" class="btn btn-lg btn-primary btn-block" type="button">Check out which year has the bet movie!</button><br>
+                <button id="btnRenderReviewPage" class="btn btn-lg btn-primary btn-block" type="button">Look at reviews</button><br>
+                <button id="btnGallery" class="btn btn-lg btn-primary btn-block" type="button">Your personal gallery</button><br>
+                <button id="btnSignOut" class="btn btn-lg btn-primary btn-block" type="button">Sign out</button><br>
+                <button id="btnDeleteUser" class="btn btn-lg btn-primary btn-block" type="button">Delete User</button> <br>
+                
+                <form class="form-signin">
+                <input type="name" name="inputName" id="inputName" class="form-control" placeholder="Name" required autofocus>
+                <fieldset>
+                  <legend>Filter by Platform</legend>
+                    <div>
+                      <input type="radio" id="Liked" name="gallery_type" value="Liked">
+                      <label for="netlix">Liked</label>
+                    </div>
+                    <div>
+                      <input type="radio" id="Disliked" name="gallery_type" value="Disliked">
+                      <label for="hulu">Disliked</label>
+                    </div>
+                    <div>
+                      <input type="radio" id="Watched" name="gallery_type" value="Watched">
+                      <label for="prime">Watched</label>
+                    </div>
+                </fieldset>
+                <button id="btnSearch" class="btn btn-lg btn-primary btn-block" type="button"><i class="fa fa-search"></i>Search</button>
+
+                </form>
+
+                <div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th class="Name">Name</th>
+                            <th class="Type">Type</th>
+                            <th class="Popularity">Popularity</th>
+                            <th class="AverageRating">Average Rating</th>
+                            <th class="Platform">Platform</th>
+                            <th class="update"></th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>{{item.Name}}</td>
+                                <td>{{item.Type}}</td>
+                                <td>{{item.Popularity}}</td>
+                                <td>{{item.AverageRating}}</td>
+                                <td>{{item.Platform}}</td>
+                                <td><button type="button" class="btn btnReview" data-source="{{name}}" data-titleid="{{item.Title_id}}" data-type="{{item.Type}}" data-content="{{item.Name}}">Review</button></td>
+                                <td><button type="button" class="btn btnImpression" data-source="{{name}}" data-titleid="{{item.Title_id}}" data-type="{{item.Type}}" data-content="{{item.Name}}" data-impression="Like"><i class="fa fa-thumbs-up"></i>Like</button></td>
+                                <td><button type="button" class="btn btnImpression" data-source="{{name}}" data-titleid="{{item.Title_id}}" data-type="{{item.Type}}" data-content="{{item.Name}}" data-impression="Dislike"><i class="fa fa-thumbs-down"></i>Dislike</button></td>
+                            </tr>
+                        {% endfor %}
+                        
+                        </tbody>
+                    </table>
+              </div>
+        </nav>
+      </div>
+ 
+    </div>
+  </body>
+</html>

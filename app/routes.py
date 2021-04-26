@@ -87,7 +87,7 @@ def signOut():
     print(response)
     return response
 
-@app.route('/renderHome',methods=['POST'])
+@app.route('/renderHome')
 def renderHome():
     user_name = db_helper.getName(request.cookies.get('UserIdCookie'))
     # print(user_name)
@@ -394,6 +394,16 @@ def renderSearchedReview(df, name):
 
 @app.route('/goHome',methods=['POST'])
 def goHome():
-    username = request.form.getlist('name')[0]
+    ##username = request.form.getlist('name')[0]
     return renderHome()
 
+@app.route('/getGallery',methods=['POST'])
+def getGallery():
+    items = []
+    user_name = db_helper.getName(request.cookies.get('UserIdCookie'))
+    inputs = request.form.getlist('form')[0].split('&')
+    print(inputs)
+    return renderGallery(user_name, items)
+
+def renderGallery(username, items):
+    return render_template('gallery.html',name = username, items=items)

@@ -100,7 +100,7 @@ $(function() {
     });
 
     $('#btnGallery').click(function(){
-        console.log(user_name)
+        //console.log(user_name)
         $.ajax({
             url: '/getGallery',
             type: 'POST',
@@ -119,7 +119,7 @@ $(function() {
 
     $('#btnGoHome').click(function() {
         $.ajax({
-            url: '/renderHome',
+            url: '/goHome',
             type: 'POST',
             dataType: 'text',
             success: function(response) {
