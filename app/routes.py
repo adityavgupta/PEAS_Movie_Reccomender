@@ -92,7 +92,9 @@ def signOut():
 def renderHome():
     user_name = db_helper.getName(request.cookies.get('UserIdCookie'))
     movie_recs = rec.get_recommendation(request.cookies.get('UserIdCookie'))
-    return render_template("home.html",name=user_name, items=movie_recs)
+    keys=('Name', 'Type', 'Popularity', 'AverageRating','Platform', 'Genre')
+    df = [dict(zip(keys, values)) for values in movie_recs]
+    return render_template("home.html",name=user_name, items=df)
 
 @app.route('/search',methods=['POST'])
 def search():
