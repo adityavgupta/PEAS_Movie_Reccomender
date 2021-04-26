@@ -2,6 +2,7 @@
 from flask import render_template, request, jsonify, Flask, redirect, url_for
 from app import app
 from app import database as db_helper
+from app import recommender as rec
 import pandas as pd
 import numpy as np
 
@@ -90,8 +91,8 @@ def signOut():
 @app.route('/renderHome')
 def renderHome():
     user_name = db_helper.getName(request.cookies.get('UserIdCookie'))
-    # print(user_name)
-    return render_template("home.html",name=user_name)
+    movie_recs = rec.get_recommendation(request.cookies.get('UserIdCookie'))
+    return render_template("home.html",name=user_name, items=movie_recs)
 
 @app.route('/search',methods=['POST'])
 def search():

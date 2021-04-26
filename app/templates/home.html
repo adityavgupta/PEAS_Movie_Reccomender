@@ -68,7 +68,34 @@
       <!-- <footer class="footer">
         <p>&copy; This is user home {{name}}</p>
       </footer> -->
- 
     </div>
+
+    <div>
+    <h1> Recommended movies </h1>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th class="Name">Name</th>
+                            <th class="Type">Type</th>
+                            <th class="Popularity">Popularity</th>
+                            <th class="AverageRating">Average Rating</th>
+                            <th class="Platform">Platform</th>
+                            <th class="update"></th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>{{item.Name}}</td>
+                                <td>{{item.Type}}</td>
+                                <td>{{item.Popularity}}</td>
+                                <td>{{item.AverageRating}}</td>
+                                <td>{{item.Platform}}</td>
+                        {% endfor %}
+                        
+                        </tbody>
+                    </table>
+              </div>
   </body>
 </html>
