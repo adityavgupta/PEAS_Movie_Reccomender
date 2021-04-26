@@ -401,9 +401,19 @@ def goHome():
 def getGallery():
     items = []
     user_name = db_helper.getName(request.cookies.get('UserIdCookie'))
+    # inputs = request.form.getlist('form')[0].split('&')
+    # print(inputs)
+    return renderGallery(user_name, items)
+
+@app.route('/searchGallery',methods=['POST'])
+def searchGallery():
+    items = []
+    user_name = db_helper.getName(request.cookies.get('UserIdCookie'))
     inputs = request.form.getlist('form')[0].split('&')
     print(inputs)
+    print('ssss')
     return renderGallery(user_name, items)
+
 
 def renderGallery(username, items):
     return render_template('gallery.html',name = username, items=items)
