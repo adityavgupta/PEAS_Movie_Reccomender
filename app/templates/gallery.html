@@ -36,7 +36,7 @@
                 <fieldset>
                   <legend>Filter by Platform</legend>
                     <div>
-                      <input type="radio" id="Liked" name="gallery_type" value="Liked">
+                      <input type="radio" id="Liked" name="gallery_type" value="Liked" checked="checked">
                       <label for="Liked">Liked</label>
                     </div>
                     <div>
@@ -76,6 +76,7 @@
                                 <td><button type="button" class="btn btnReview" data-source="{{name}}" data-titleid="{{item.Title_id}}" data-type="{{item.Type}}" data-content="{{item.Name}}">Review</button></td>
                                 <td><button type="button" class="btn btnImpression" data-source="{{name}}" data-titleid="{{item.Title_id}}" data-type="{{item.Type}}" data-content="{{item.Name}}" data-impression="Like"><i class="fa fa-thumbs-up"></i>Like</button></td>
                                 <td><button type="button" class="btn btnImpression" data-source="{{name}}" data-titleid="{{item.Title_id}}" data-type="{{item.Type}}" data-content="{{item.Name}}" data-impression="Dislike"><i class="fa fa-thumbs-down"></i>Dislike</button></td>
+                                <td><button type="button" class="btn btnDelete" data-source="{{name}}" data-titleid="{{item.Title_id}}" data-type="{{item.Type}}" data-content="{{item.Name}}" data-section="{{item.section}}"><i class="fa fa-thumbs-down"></i>Delete</button></td>
                             </tr>
                         {% endfor %}
                         

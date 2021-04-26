@@ -453,3 +453,37 @@ def getId(username, pswd):
     query = "select user_id from users where name = '{}' and passwd = '{}'".format(str(username),str(pswd))
     uid = conn.execute(query).fetchall()[0][0]
     return uid
+
+def searchGallery(user_id,show_name, section):
+    conn = db.connect()
+    query = ''
+    if show_name is None or show_name == '':
+        if section == 'Liked':
+            query = 'select * from\
+((select name as title_name, type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from impressions_m where user_id = {} and impression = 1)) UNION\
+(SELECT name, type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from impressions_t where user_id = {} and impression = 1))) as comb'.format(user_id,user_id)
+        elif section == 'Disliked':
+            query = 'select * from\
+((select name as title_name, type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from impressions_m where user_id = {} and impression = 0)) UNION\
+(SELECT name, type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from impressions_t where user_id = {} and impression = 0))) as comb'.format(user_id,user_id)
+        else:
+            query = 'select * from\
+((select name as title_name, type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from watched_m where user_id = {})) UNION\
+(SELECT name, type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from watched_t where user_id = {}))) as comb'.format(user_id,user_id)
+    else:
+        if section == 'Liked':
+            query = 'select * from\
+((select name as title_name, type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from impressions_m where user_id = {} and impression = 1 ) and name like "%%{}%%") UNION\
+(SELECT name, type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from impressions_t where user_id = {} and impression = 1) and name like "%%{}%%")) as comb'.format(user_id,show_name, user_id, show_name)
+        elif section == 'Disliked':
+            query = 'select * from\
+((select name as title_name, type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from impressions_m where user_id = {} and impression = 0 ) and name like "%%{}%%") UNION\
+(SELECT name, type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from impressions_t where user_id = {} and impression = 0)and name like "%%{}%%")) as comb'.format(user_id,show_name, user_id, show_name)
+        else:
+            query = 'select * from\
+((select name as title_name, type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from watched_m where user_id = {})and name like "%%{}%%") UNION\
+(SELECT name, type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from watched_t where user_id = {})and name like "%%{}%%")) as comb'.format(user_id,show_name, user_id, show_name)
+    #print(query)
+    result = conn.execute(query).fetchall()
+    print(result)
+    return result

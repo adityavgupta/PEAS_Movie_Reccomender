@@ -406,16 +406,31 @@ def getGallery():
     user_name = db_helper.getName(request.cookies.get('UserIdCookie'))
     # inputs = request.form.getlist('form')[0].split('&')
     # print(inputs)
+    #print('ssss')
     return renderGallery(user_name, items)
 
 @app.route('/searchGallery',methods=['POST'])
 def searchGallery():
     items = []
     user_name = db_helper.getName(request.cookies.get('UserIdCookie'))
+    user_id = request.cookies.get('UserIdCookie')
     inputs = request.form.getlist('form')[0].split('&')
-    print(inputs)
-    print('ssss')
-    return renderGallery(user_name, items)
+    show_name = inputs[0].split('=')[-1]
+    section = inputs[1].split('=')[-1]
+    #print(show_name,section)
+    #print('ssss')
+    items = db_helper.searchGallery(user_id, show_name, section)
+    #print(items)
+    # for item in items:
+    #     print(type(item))
+    #     item.add(section)
+    # print(items)
+    keys=('Name','Type','Popularity', 'AverageRating','Platform')
+    df = [dict(zip(keys, values)) for values in items]
+    for row in df:
+        row['section'] = section
+    print(df)
+    return renderGallery(user_name, df)
 
 
 def renderGallery(username, items):
