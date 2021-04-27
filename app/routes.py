@@ -36,8 +36,8 @@ def signUp():
         if _name and _dob and _password:
             data = request.get_json()
             user_id = db_helper.insert_new_user(_name,_dob,_password)
-            response = redirect(url_for("renderHome", variable='home'))
-            response.set_cookie('UserIdCookie', user_id)
+            response = redirect(url_for("renderHome"))
+            response.set_cookie('UserIdCookie', str(user_id))
             return response
         else:
             return jsonify({'html':'<span>Enter the required fields</span>'})
