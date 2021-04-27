@@ -425,7 +425,7 @@ def searchGallery():
     #     print(type(item))
     #     item.add(section)
     # print(items)
-    keys=('Name','Type','Popularity', 'AverageRating','Platform')
+    keys=('Name','Title_id','Type','Popularity', 'AverageRating','Platform')
     df = [dict(zip(keys, values)) for values in items]
     for row in df:
         row['section'] = section
@@ -435,3 +435,18 @@ def searchGallery():
 
 def renderGallery(username, items):
     return render_template('gallery.html',name = username, items=items)
+
+@app.route('/delFromGallery',methods=['POST'])
+def deleteFromGal():
+    print('s')
+    try:
+        user_id = request.cookies.get('UserIdCookie')
+        title_id = request.form.getlist('title_id')[0]
+        type_ = request.form.getlist('type')[0]
+        section = request.form.getlist('section')[0]
+        print(user_id, title_id, type_, section)
+        db_helper.delete_impression_watched(user_id, title_id, type_, section)
+        result = {'success': False, 'response': 'Done'}
+        return jsonify(result)
+    except Exception as e:
+        return jsonify({'error':str(e)})
