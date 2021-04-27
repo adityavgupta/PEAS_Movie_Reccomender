@@ -91,7 +91,34 @@
               </div>
         </nav>
       </div>
- 
     </div>
+
+        <h1> Suggested movies based on your search result </h1>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th class="Name">Name</th>
+                            <th class="Type">Type</th>
+                            <th class="Popularity">Popularity</th>
+                            <th class="AverageRating">Average Rating</th>
+                            <th class="Platform">Platform</th>
+                            <th class="Genre">Genre</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for item in suggested %}
+                            <tr>
+                                <td>{{item.Name}}</td>
+                                <td>{{item.Type}}</td>
+                                <td>{{item.Popularity}}</td>
+                                <td>{{item.AverageRating}}</td>
+                                <td>{{item.Platform}}</td>
+                                <td>{{item.Genre}}</td>
+                        {% endfor %}
+                        
+                        </tbody>
+                    </table>
+              </div>
   </body>
 </html>

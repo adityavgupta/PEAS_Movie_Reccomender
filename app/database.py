@@ -2,6 +2,28 @@
 from app import db
 import sys
 
+def get_suggested(name):
+    conn=db.connect()
+    print(name)
+    keys=('Name', 'Type', 'Popularity', 'AverageRating','Platform', 'Genre')
+    try:
+        title_id_result=conn.execute('SELECT title_id FROM Movie WHERE name="{}";'.format(name))
+        title_id = title_id_result.fetchone()
+        if title_id == None:
+            return [dict(zip(keys, values)) for values in [""]]
+
+        print(title_id[0])
+        # conn.execute('delete procedure get_suggested;')
+        conn.execute('call get_suggested("{}");'.format(title_id[0]))
+        print("owo")
+        suggested_result=conn.execute('SELECT movie_name, type_id, popularity, avg_rating, available_on, genres FROM suggested ORDER BY rand() limit 10;').fetchall()
+        print(suggested_result)
+        return [dict(zip(keys, values)) for values in suggested_result]
+        
+    except:
+        print("in except")
+        return [dict(zip(keys, values)) for values in [""]]
+
 def insert_new_user(_name:str,_dob:str,_password:str)->int:
     """Insert new task to todo table.
 

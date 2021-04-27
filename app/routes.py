@@ -130,8 +130,8 @@ def search():
             if result:
                 keys=('Name','Type','Title_id','Popularity', 'AverageRating','Platform')
                 df = [dict(zip(keys, values)) for values in result]
-                #print(df)
-                return renderSearched(df)
+                sugg_df = db_helper.get_suggested(result[0][0])
+                return renderSearched(df, sugg_df)
             
         else:
             return jsonify({'html':'<span>Enter the required fields</span>'})
@@ -140,9 +140,9 @@ def search():
         return jsonify({'error':str(e)})
 
 @app.route('/renderSearched')
-def renderSearched(df):
+def renderSearched(df, sugg_df):
     user_name = db_helper.getName(request.cookies.get('UserIdCookie'))
-    return render_template("searched.html", name=user_name, items=df)
+    return render_template("searched.html", name=user_name, items=df, suggested=sugg_df)
     #return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)
 
 @app.route('/leaveImpression',methods=['POST'])
