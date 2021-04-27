@@ -103,7 +103,11 @@ def search():
         #print(request.form.getlist('name'))
         #name = request.form[0][1]
         inputs = request.form.getlist('form')[0].split('&')
-        split_inputs = [x.split('=') for x in inputs]
+        split_inputs = []
+        for x in inputs:
+            x = x.replace('+',' ')
+            split_inputs.append(x.split('='))
+        #print(split_inputs)
         params = dict()
 
         params['platform'] = ''
@@ -114,6 +118,8 @@ def search():
                 params[i[0]] = ''+i[1]
         #print(params)
         show_name = params['inputName']
+        if len(show_name) == 0:
+            return renderHome()
         show_platform = params['platform']
         show_start_date = params['inputStartDate']
         name = request.form.getlist('name')[0]
