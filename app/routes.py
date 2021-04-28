@@ -170,6 +170,7 @@ def review():
     try:
         print(request.form)
         username = request.form.getlist('user_name')[0]
+        print(username)
         showname = request.form.getlist('showname')[0]
         title_id = request.form.getlist('title_id')[0]
         type_ = request.form.getlist('type')[0]
@@ -182,7 +183,7 @@ def review():
 @app.route('/renderReview')
 def renderReview(showname,titleid, type_, update_type):
     user_name = db_helper.getName(request.cookies.get('UserIdCookie'))
-    return render_template("review.html", username=username, showname=showname, titleid=titleid, type=type_, update_type=update_type)
+    return render_template("review.html", username=user_name, showname=showname, titleid=titleid, type=type_, update_type=update_type)
     #return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)
 
 @app.route('/submitReview',methods=['POST'])
