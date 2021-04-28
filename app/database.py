@@ -494,8 +494,8 @@ def searchGallery(user_id,show_name, section):
 (SELECT name, title_id, type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from impressions_t where user_id = {} and impression = 1))) as comb'.format(user_id,user_id)
         elif section == 'Disliked':
             query = 'select * from\
-((select name as title_name, title_id as t_id,type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from impressions_m where user_id = {} and impression = 0)) UNION\
-(SELECT name, title_id,type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from impressions_t where user_id = {} and impression = 0))) as comb'.format(user_id,user_id)
+((select name as title_name, title_id as t_id,type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from impressions_m where user_id = {} and impression = -1)) UNION\
+(SELECT name, title_id,type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from impressions_t where user_id = {} and impression = -1))) as comb'.format(user_id,user_id)
         else:
             query = 'select * from\
 ((select name as title_name, title_id as t_id,type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from watched_m where user_id = {})) UNION\
@@ -507,8 +507,8 @@ def searchGallery(user_id,show_name, section):
 (SELECT name, title_id,type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from impressions_t where user_id = {} and impression = 1) and name like "%%{}%%")) as comb'.format(user_id,show_name, user_id, show_name)
         elif section == 'Disliked':
             query = 'select * from\
-((select name as title_name, title_id as t_id,type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from impressions_m where user_id = {} and impression = 0 ) and name like "%%{}%%") UNION\
-(SELECT name, title_id,type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from impressions_t where user_id = {} and impression = 0)and name like "%%{}%%")) as comb'.format(user_id,show_name, user_id, show_name)
+((select name as title_name, title_id as t_id,type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from impressions_m where user_id = {} and impression = -1 ) and name like "%%{}%%") UNION\
+(SELECT name, title_id,type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from impressions_t where user_id = {} and impression = -1)and name like "%%{}%%")) as comb'.format(user_id,show_name, user_id, show_name)
         else:
             query = 'select * from\
 ((select name as title_name, title_id as t_id,type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from watched_m where user_id = {})and name like "%%{}%%") UNION\
