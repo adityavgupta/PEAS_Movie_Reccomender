@@ -182,6 +182,7 @@ def review():
 
 @app.route('/renderReview')
 def renderReview(showname,titleid, type_, update_type):
+    print(showname,titleid,type_,update_type)
     user_name = db_helper.getName(request.cookies.get('UserIdCookie'))
     return render_template("review.html", username=user_name, showname=showname, titleid=titleid, type=type_, update_type=update_type)
     #return render_template("searched.html", name=name, tables=[df.to_html(classes='data')], titles=df.columns.values)

@@ -40,7 +40,9 @@ $(function() {
             dataType: 'text',
             success: function(response) {
                 console.log(response);
-                dres(response);
+                document.open();
+                document.write(`${response}`);
+                document.close();
                 
             },
             error: function(error) {
@@ -68,7 +70,9 @@ $(function() {
             dataType: 'text',
             success: function(response) {
                 console.log(response);
-                dres(response);
+                document.open();
+                document.write(`${response}`);
+                document.close();
                 
             },
             error: function(error) {
