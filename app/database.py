@@ -71,6 +71,19 @@ def delete_user(uname:str):
     conn.close()
     return 0
 
+def update_user(uid:int, uname:str):
+    conn = db.connect()
+
+    try:
+        update = 'UPDATE Users SET name="{}" WHERE user_id = {}'.format(uname, uid)
+        conn.execute(update)
+        print("success update")
+    except:
+        print("did not update user")
+
+    conn.close() 
+    return 0
+
 def insert_new_review(uname:str,title_id:str,type_id:str,rating:str,review:str)->int:
     conn = db.connect()
     review_table = 'Review_movie' if (type_id == 'movie') else 'Review_tv'

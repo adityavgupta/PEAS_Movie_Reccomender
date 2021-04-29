@@ -48,7 +48,7 @@ def signUp():
 @app.route('/deleteUser', methods=['POST'])
 def deleteUser():
     try:
-        print(request.form.getlist('name')[0])
+        #print(request.form.getlist('name')[0])
         #print(request.form.getlist('user_name')[0])
         username = request.form.getlist('name')[0]
         db_helper.delete_user(username)
@@ -56,6 +56,22 @@ def deleteUser():
 
     except:
         print("ooooo")
+
+@app.route('/updateUser', methods=['POST'])
+def updateUser():
+    return render_template("update_user.html")
+
+@app.route('/submitUserUpdate', methods=['POST'])
+def submitUserUpdate():
+    try:
+        user_id = request.cookies.get('UserIdCookie')
+        name = request.form['inputName']
+        print('reeeeee')
+        print(name)
+        db_helper.update_user(user_id, name)
+        return renderHome()
+    except:
+        print("submition failed")
 
 @app.route('/signIn',methods=['POST'])
 def signIn():

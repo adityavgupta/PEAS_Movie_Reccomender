@@ -99,6 +99,29 @@ $(function() {
         });
     });
 
+    $('#btnUpdateUser').click(function(){
+        const button = $(this)
+        const user_name = button.data('source')
+        
+        console.log(user_name)
+        $.ajax({
+            url: '/updateUser',
+            type: 'POST',
+            dataType: 'text',
+            data: {"name":$('#home_name').html()},
+            success: function(response) {
+                console.log(response);
+                document.open();
+                document.write(`${response}`);
+                document.close();
+                
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    });
+
     $('#btnGallery').click(function(){
         //console.log(user_name)
         $.ajax({
