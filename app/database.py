@@ -7,7 +7,7 @@ def get_suggested(name):
     print(name)
     keys=('Name', 'Type', 'Popularity', 'AverageRating','Platform', 'Genre')
     try:
-        title_id_result=conn.execute('SELECT title_id FROM Movie WHERE name="{}";'.format(name))
+        title_id_result=conn.execute('SELECT title_id FROM movie WHERE name="{}";'.format(name))
         title_id = title_id_result.fetchone()
         if title_id == None:
             return [dict(zip(keys, values)) for values in [""]]
@@ -21,7 +21,7 @@ def get_suggested(name):
         return [dict(zip(keys, values)) for values in suggested_result]
         
     except:
-        print("in except")
+        print("in get suggested except")
         return [dict(zip(keys, values)) for values in [""]]
 
 def insert_new_user(_name:str,_dob:str,_password:str)->int:
@@ -158,10 +158,10 @@ def insert_into_watched(username:str,list_of_movies:str,list_of_tv_shows:str,lis
             movie_imp_list = list_of_movie_impressions.split(",")
 
             for i in range(len(movies_list)):
-                query_mid = 'SELECT Movie.title_id FROM Movie WHERE Movie.name="{}";'.format(movies_list[i])
+                query_mid = 'SELECT movie.title_id FROM movie WHERE movie.name="{}";'.format(movies_list[i])
                 movie_id=conn.execute(query_mid).fetchall()[0][0]
                 try:
-                    insertion = 'INSERT INTO WATCHED_M VALUES("{}",{});'.format(movie_id, user_id)
+                    insertion = 'INSERT INTO Watched_M VALUES("{}",{});'.format(movie_id, user_id)
                     conn.execute(insertion)
                 except:
                     pass#already watched
@@ -183,7 +183,7 @@ def insert_into_watched(username:str,list_of_movies:str,list_of_tv_shows:str,lis
             tv_list = list_of_tv_shows.split(",")
             print(tv_list,tv_imp_list)
             for i in range(len(tv_list)):
-                query_tid = 'SELECT TV_Show.title_id FROM TV_Show WHERE TV_Show.name="{}";'.format(tv_list[i])
+                query_tid = 'SELECT tv_show.title_id FROM tv_show WHERE tv_show.name="{}";'.format(tv_list[i])
                 tv_id=conn.execute(query_tid).fetchall()[0][0]
                 try:
                     insertion = 'INSERT INTO WATCHED_T VALUES("{}",{});'.format(tv_id,user_id)
@@ -218,11 +218,11 @@ def update_watched(username:str,list_of_movies:str,list_of_tv_shows:str,list_of_
             movie_imp_list = list_of_movie_impressions.split(",")
             print(movies_list)
             for i in range(len(movies_list)):
-                query_mid = 'SELECT Movie.title_id FROM Movie WHERE Movie.name="{}";'.format(movies_list[i])
+                query_mid = 'SELECT movie.title_id FROM movie WHERE movie.name="{}";'.format(movies_list[i])
                 # print('movie_id: ')
                 movie_id=conn.execute(query_mid).fetchall()[0][0]
                 # print(movie_id)
-                #insertion = 'UPDATE WATCHED_M SET user_id={} WHERE title_id="{}";'.format(movie_id, user_id)
+                #insertion = 'UPDATE Watched_M SET user_id={} WHERE title_id="{}";'.format(movie_id, user_id)
                 #conn.execute(insertion)
                 if i < len(movie_imp_list):
                     i_insertion = 'UPDATE Impressions_M SET impression={} WHERE title_id="{}" AND user_id={};'.format(movie_imp_list[i],movie_id, user_id)
@@ -235,7 +235,7 @@ def update_watched(username:str,list_of_movies:str,list_of_tv_shows:str,list_of_
             tv_list = list_of_tv_shows.split(",")
 
             for i in range(len(tv_list)):
-                query_tid = 'SELECT TV_Show.title_id FROM TV_Show WHERE TV_Show.name="{}";'.format(tv_list[i])
+                query_tid = 'SELECT tv_show.title_id FROM tv_show WHERE tv_show.name="{}";'.format(tv_list[i])
                 print(query_tid)
                 print('tv_id: ')
                 tv_id=conn.execute(query_tid).fetchall()[0][0]
@@ -265,19 +265,19 @@ def lookup_watched(username:str,list_of_movies:str,list_of_tv_shows:str):
         if list_of_movies:
             for movie in list_of_movies.split(','):
                 try:
-                    query_impression = 'SELECT im.impression FROM impressions_m im WHERE im.user_id = {} AND im.title_id = (SELECT Movie.title_id FROM Movie WHERE Movie.name="{}");'.format(user_id,movie)
+                    query_impression = 'SELECT im.impression FROM Impressions_M im WHERE im.user_id = {} AND im.title_id = (SELECT movie.title_id FROM movie WHERE movie.name="{}");'.format(user_id,movie)
                     #print(query_impression)
                     impression = conn.execute(query_impression).fetchall()[0][0]
-                    results.append([movie,'Movie','Yes',imp_val[impression]])
+                    results.append([movie,'movie','Yes',imp_val[impression]])
                 except:
-                     results.append([movie,'Movie','No','N/A'])
+                     results.append([movie,'movie','No','N/A'])
         
 
 
         if list_of_tv_shows:
             for tv_show in list_of_tv_shows.split(','):
                 try:
-                    query_impression = 'SELECT im.impression FROM impressions_t im WHERE im.user_id = {} AND im.title_id = (SELECT TV_Show.title_id FROM TV_Show WHERE TV_Show.name="{}");'.format(user_id,tv_show)
+                    query_impression = 'SELECT im.impression FROM Impressions_T im WHERE im.user_id = {} AND im.title_id = (SELECT tv_show.title_id FROM tv_show WHERE tv_show.name="{}");'.format(user_id,tv_show)
                     #print(query_impression)
                     impression = conn.execute(query_impression).fetchall()[0][0]
                     results.append([tv_show,'TVShow','Yes',imp_val[impression]])
@@ -299,20 +299,20 @@ def delete_from_watched(username:str,movie:str,tv_show:str)->int:
         user_id=conn.execute(query_uid).fetchall()[0][0]
 
         if movie != None:
-            query_mid = 'SELECT Movie.title_id FROM Movie WHERE Movie.name="{}";'.format(movie)
+            query_mid = 'SELECT movie.title_id FROM movie WHERE movie.name="{}";'.format(movie)
             movie_id=conn.execute(query_mid).fetchall()[0][0]
             delete_impression_m = 'DELETE FROM Impressions_M WHERE title_id LIKE "{}" AND user_id LIKE {};'.format(movie_id, user_id)
             conn.execute(delete_impression_m)
-            delete_watched_m = 'DELETE FROM WATCHED_M WHERE title_id LIKE "{}" AND user_id LIKE {};'.format(movie_id, user_id)
-            conn.execute(delete_watched_m)
+            delete_Watched_M = 'DELETE FROM Watched_M WHERE title_id LIKE "{}" AND user_id LIKE {};'.format(movie_id, user_id)
+            conn.execute(delete_Watched_M)
 
         if tv_show != None:
-            query_tid = 'SELECT TV_Show.title_id FROM TV_Show WHERE TV_Show.name="{}";'.format(tv_show)
+            query_tid = 'SELECT tv_show.title_id FROM tv_show WHERE tv_show.name="{}";'.format(tv_show)
             tv_id=conn.execute(query_tid).fetchall()[0][0]
             delete_impression_t = 'DELETE FROM Impressions_T WHERE title_id LIKE "{}" AND user_id LIKE {};'.format(tv_id, user_id)
             conn.execute(delete_impression_t)
-            delete_watched_t = 'DELETE FROM WATCHED_T WHERE title_id LIKE "{}" AND user_id LIKE {};'.format(tv_id, user_id)
-            conn.execute(delete_watched_t)
+            delete_Watched_T = 'DELETE FROM WATCHED_T WHERE title_id LIKE "{}" AND user_id LIKE {};'.format(tv_id, user_id)
+            conn.execute(delete_Watched_T)
         conn.close()
 
     except:
@@ -409,7 +409,7 @@ def lookup(name:str, platform:str, date:str):
 def paulQuery():
     conn = db.connect()
     try:
-        query = 'SELECT * from ((select movie.release_year as ry, AVG(movie.avg_rating) as ar , "Movie" as type\
+        query = 'SELECT * from ((select movie.release_year as ry, AVG(movie.avg_rating) as ar , "movie" as type\
                 from movie group by movie.release_year)\
                   union \
                 (select tv_show.start_year, AVG(tv_show.avg_rating) as avg_ratings, "TV" as type\
@@ -486,14 +486,14 @@ def lookup_reviews(name:str, platforms:str, show_name:str):
 
 def getName(uid):
     conn = db.connect()
-    query = "select name from users where user_id = '{}'".format(str(uid))
+    query = "select name from Users where user_id = '{}'".format(str(uid))
     user_name = conn.execute(query).fetchall()[0][0]
     return user_name
 
 
 def getId(username, pswd):
     conn = db.connect()
-    query = "select user_id from users where name = '{}' and passwd = '{}'".format(str(username),str(pswd))
+    query = "select user_id from Users where name = '{}' and passwd = '{}'".format(str(username),str(pswd))
     uid = conn.execute(query).fetchall()[0][0]
     return uid
 
@@ -503,29 +503,29 @@ def searchGallery(user_id,show_name, section):
     if show_name is None or show_name == '':
         if section == 'Liked':
             query = 'select * from\
-((select name as title_name, title_id as t_id, type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from impressions_m where user_id = {} and impression = 1)) UNION\
-(SELECT name, title_id, type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from impressions_t where user_id = {} and impression = 1))) as comb'.format(user_id,user_id)
+((select name as title_name, title_id as t_id, type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from Impressions_M where user_id = {} and impression = 1)) UNION\
+(SELECT name, title_id, type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from Impressions_T where user_id = {} and impression = 1))) as comb'.format(user_id,user_id)
         elif section == 'Disliked':
             query = 'select * from\
-((select name as title_name, title_id as t_id,type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from impressions_m where user_id = {} and impression = -1)) UNION\
-(SELECT name, title_id,type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from impressions_t where user_id = {} and impression = -1))) as comb'.format(user_id,user_id)
+((select name as title_name, title_id as t_id,type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from Impressions_M where user_id = {} and impression = -1)) UNION\
+(SELECT name, title_id,type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from Impressions_T where user_id = {} and impression = -1))) as comb'.format(user_id,user_id)
         else:
             query = 'select * from\
-((select name as title_name, title_id as t_id,type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from watched_m where user_id = {})) UNION\
-(SELECT name, title_id,type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from watched_t where user_id = {}))) as comb'.format(user_id,user_id)
+((select name as title_name, title_id as t_id,type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from Watched_M where user_id = {})) UNION\
+(SELECT name, title_id,type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from Watched_T where user_id = {}))) as comb'.format(user_id,user_id)
     else:
         if section == 'Liked':
             query = 'select * from\
-((select name as title_name, title_id as t_id,type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from impressions_m where user_id = {} and impression = 1 ) and name like "%%{}%%") UNION\
-(SELECT name, title_id,type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from impressions_t where user_id = {} and impression = 1) and name like "%%{}%%")) as comb'.format(user_id,show_name, user_id, show_name)
+((select name as title_name, title_id as t_id,type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from Impressions_M where user_id = {} and impression = 1 ) and name like "%%{}%%") UNION\
+(SELECT name, title_id,type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from Impressions_T where user_id = {} and impression = 1) and name like "%%{}%%")) as comb'.format(user_id,show_name, user_id, show_name)
         elif section == 'Disliked':
             query = 'select * from\
-((select name as title_name, title_id as t_id,type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from impressions_m where user_id = {} and impression = -1 ) and name like "%%{}%%") UNION\
-(SELECT name, title_id,type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from impressions_t where user_id = {} and impression = -1)and name like "%%{}%%")) as comb'.format(user_id,show_name, user_id, show_name)
+((select name as title_name, title_id as t_id,type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from Impressions_M where user_id = {} and impression = -1 ) and name like "%%{}%%") UNION\
+(SELECT name, title_id,type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from Impressions_T where user_id = {} and impression = -1)and name like "%%{}%%")) as comb'.format(user_id,show_name, user_id, show_name)
         else:
             query = 'select * from\
-((select name as title_name, title_id as t_id,type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from watched_m where user_id = {})and name like "%%{}%%") UNION\
-(SELECT name, title_id,type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from watched_t where user_id = {})and name like "%%{}%%")) as comb'.format(user_id,show_name, user_id, show_name)
+((select name as title_name, title_id as t_id,type_id as type_mt, popularity as pop, avg_rating as ar, available_on as platform from movie where title_id in (select title_id from Watched_M where user_id = {})and name like "%%{}%%") UNION\
+(SELECT name, title_id,type_id, popularity, avg_rating, available_on FROM tv_show where title_id in (select title_id from Watched_T where user_id = {})and name like "%%{}%%")) as comb'.format(user_id,show_name, user_id, show_name)
     #print(query)
     result = conn.execute(query).fetchall()
     #print(result)
@@ -537,16 +537,16 @@ def delete_impression_watched(user_id, title_id, type_, section):
     query2 = ''
     if section == 'Watched':
         if type_ == 'movie':
-            query1 = 'DELETE FROM watched_m WHERE user_id = {} and title_id = "{}"'.format(user_id,title_id)
-            query2 = 'DELETE FROM impressions_m WHERE user_id = {} and title_id = "{}"'.format(user_id,title_id)
+            query1 = 'DELETE FROM Watched_M WHERE user_id = {} and title_id = "{}"'.format(user_id,title_id)
+            query2 = 'DELETE FROM Impressions_M WHERE user_id = {} and title_id = "{}"'.format(user_id,title_id)
         else:
-            query1 = 'DELETE FROM watched_t WHERE user_id = {} and title_id = "{}"'.format(user_id,title_id)
-            query2= 'DELETE FROM impressions_t WHERE user_id = {} and title_id = "{}"'.format(user_id,title_id)
+            query1 = 'DELETE FROM Watched_T WHERE user_id = {} and title_id = "{}"'.format(user_id,title_id)
+            query2= 'DELETE FROM Impressions_T WHERE user_id = {} and title_id = "{}"'.format(user_id,title_id)
     else:
         if type_ == 'movie':
-            query1 = 'DELETE FROM impressions_m WHERE user_id = {} and title_id = "{}"'.format(user_id,title_id)
+            query1 = 'DELETE FROM Impressions_M WHERE user_id = {} and title_id = "{}"'.format(user_id,title_id)
         else:
-            query1= 'DELETE FROM impressions_t WHERE user_id = {} and title_id = "{}"'.format(user_id,title_id)
+            query1= 'DELETE FROM Impressions_T WHERE user_id = {} and title_id = "{}"'.format(user_id,title_id)
     try:
         if query2 == '' or len(query2) == 0:
             conn.execute(query1)

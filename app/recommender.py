@@ -8,7 +8,7 @@ def get_rec():
     # need to change limit
     print("wow!!!!!!!!!")
     conn = db.connect()
-    movies_query = 'SELECT name, type_id, popularity, avg_rating, available_on, genres FROM Movie WHERE popularity > 5000 ORDER BY avg_rating DESC LIMIT 10;'
+    movies_query = 'SELECT name, type_id, popularity, avg_rating, available_on, genres FROM movie WHERE popularity > 5000 ORDER BY avg_rating DESC LIMIT 10;'
     movies = conn.execute(movies_query).fetchall()
     conn.close()
     return movies
@@ -16,14 +16,14 @@ def get_rec():
 def get_all_movies():
     # need to change limit
     conn = db.connect()
-    movies_query = 'SELECT name, type_id, popularity, avg_rating, available_on, genres FROM Movie WHERE popularity > 5000 ORDER BY RAND() LIMIT 1000;'
+    movies_query = 'SELECT name, type_id, popularity, avg_rating, available_on, genres FROM movie WHERE popularity > 5000 ORDER BY RAND() LIMIT 1000;'
     movies = conn.execute(movies_query).fetchall()
     conn.close()
     return movies
 
 def get_liked_movies(user_id):
     conn = db.connect()
-    liked_movies_query = 'SELECT name, type_id, popularity, avg_rating, available_on, genres FROM Review_movie NATURAL JOIN Movie WHERE user_id = {} and Review_movie.score >= 8;'.format(user_id)
+    liked_movies_query = 'SELECT name, type_id, popularity, avg_rating, available_on, genres FROM Review_movie NATURAL JOIN movie WHERE user_id = {} and Review_movie.score >= 8;'.format(user_id)
     liked_movies = conn.execute(liked_movies_query).fetchall()
     conn.close()
     return liked_movies

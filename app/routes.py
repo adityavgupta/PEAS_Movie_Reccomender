@@ -168,7 +168,7 @@ def updateImpression():
     title_id = request.form.getlist('title_id')[0]
     type_ = request.form.getlist('type')[0]
     impression = request.form.getlist('impression')[0]
-    imp_d = {'Dislike':0,'Like':1}
+    imp_d = {'Dislike':-1,'Like':1}
     print(title_id)
     try:
         if type_ == 'tvSeries':
