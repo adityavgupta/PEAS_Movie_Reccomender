@@ -1,9 +1,5 @@
-# A Todo List demo App
-This is a todo list demo designed for CS411. 
-# Tutorial
-<iframe width="560" height="315" src="https://www.youtube.com/embed/sY1lLGe7ECA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
-A comprehensive writeup is avaliable [here](https://tichung.com/blog/2021/20200323_flask/).
+# A Simple Movie Recommender App
+Simple Movie and TV Show recommender app based on cosine similarity for CS411 at UIUC 
 
 ## Requirements
 ```
@@ -54,3 +50,8 @@ gcloud config set project cs411-sp21
 gcloud auth login
 gcloud app deploy
 ```
+
+# Tutorial to build website on Google Cloud Platform - Credits to Ti-Chung
+[![](http://img.youtube.com/vi/sY1lLGe7ECA/0.jpg)](http://www.youtube.com/watch?v=sY1lLGe7ECA "")
+
+A comprehensive writeup is avaliable [here](https://tichung.com/blog/2021/20200323_flask/).
