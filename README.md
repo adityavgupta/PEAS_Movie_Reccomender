@@ -51,7 +51,7 @@ gcloud auth login
 gcloud app deploy
 ```
 
-# Tutorial to build website on Google Cloud Platform - Credits to Ti-Chung
+## Tutorial to build website on Google Cloud Platform - Credits to Ti-Chung
 [![](http://img.youtube.com/vi/sY1lLGe7ECA/0.jpg)](http://www.youtube.com/watch?v=sY1lLGe7ECA "")
 
 A comprehensive writeup is avaliable [here](https://tichung.com/blog/2021/20200323_flask/).
